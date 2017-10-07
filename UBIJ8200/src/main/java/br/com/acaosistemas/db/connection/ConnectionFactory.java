@@ -18,11 +18,16 @@ public class ConnectionFactory {
 	        }
 	        
 	        try {
-
-	        	return DriverManager.getConnection(
+	        	    // Definie o tempo de timeout de conexão em 240 segundos
+	            	DriverManager.setLoginTimeout(240);
+	            	
+                 // Retorna uma conexão com o banco de dados.
+	         	return DriverManager.getConnection
+	         		   (
 	                    "jdbc:oracle:thin:@"+DBConnectionInfo.getDbStrConnect(), 
 	                    DBConnectionInfo.getDbUserName(), 
-	                    DBConnectionInfo.getDbPassWord());
+	                    DBConnectionInfo.getDbPassWord()
+	                   );
 
 	        } catch (SQLException e) {
 
