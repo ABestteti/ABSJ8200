@@ -18,8 +18,9 @@ public class ConnectionFactory {
 	        }
 	        
 	        try {
-	        	    // Definie o tempo de timeout de conexão em 240 segundos
+	        	    // Define o tempo de timeout de conexao com o banco em 240 segundos
 	            	DriverManager.setLoginTimeout(240);
+	            	
 	            	
                  // Retorna uma conexão com o banco de dados.
 	         	return DriverManager.getConnection
@@ -31,9 +32,9 @@ public class ConnectionFactory {
 
 	        } catch (SQLException e) {
 
-	            System.out.println("Erro durante a conexão com o banco de dados.");
-	            System.out.println("Revise se os parâmetros usuário, senha e string"); 
-	            System.out.println("de conexão estão corretos.");
+	            System.err.println("Erro durante a conexão com o banco de dados.");
+	            System.err.println("Revise se os parâmetros usuário, senha e string"); 
+	            System.err.println("de conexão estão corretos.");
 	            throw new RuntimeException(e);
 	        }
 		}
