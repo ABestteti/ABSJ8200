@@ -65,7 +65,7 @@ public class ClienteWSCorreios {
 		parametros += "wsEndpoint=" + ubpx.getWsEndpoint() + "&";
 		parametros += "tableName=" + ubpx.getTableName() + "&";
 		parametros += "status=" + ubpx.getStatus().getId() + "&";
-		parametros += "tipoRecurso=" + ubpx.getTipoRecurso().getId() + "&";
+		parametros += "tipoRecurso=" + ubpx.getTipoRecurso().getId();
 		
 		try {
 			

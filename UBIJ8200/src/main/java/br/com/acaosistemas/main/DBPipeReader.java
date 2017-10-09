@@ -140,6 +140,7 @@ public class DBPipeReader {
 
 				switch (pipeCmd) {
 				case CORREIOS_SERVICE:
+					System.out.println("Recebido comando correios service!");
 					ClienteWSCorreios cws = new ClienteWSCorreios();
 					cws.execWebService(pipeRowId);
 					break;
@@ -152,12 +153,30 @@ public class DBPipeReader {
 				case CONSULTAR_LOTE_SERVICE:
 					System.out.println("Recebido comando consultar lote!");
 					break;
+				case CONSULTAR_STATUS:
+					System.out.println("Recebido comando status deamon!");
+					
+					// Nesse caso o objeto pipeRowid armazena o nome do
+					// pipe de retorno que sera usado para enviar o status
+					// de volta para o PL/SQL, sinalizando que o daemon esta
+					// rodando.
+					statusDaemon(pipeRowId);
+			     	break;
 				case STOP_DAEMON:
 					System.out.println("Recebido comando stop deamon!");
 					stopReadingPipe = true;
 					break;
 				}
-			} 
+			}
+			
+			try {
+				if (!stmt.isClosed()) {
+				   stmt.close();
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		try {
@@ -167,5 +186,46 @@ public class DBPipeReader {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	private void statusDaemon(String pPipeReturn) {
+		int    pipeStatus  = -1;
+		String pipeRetorno = null;
+		
+	    try {
+			if (!stmt.isClosed()) {
+				stmt.close();
+			}
+			
+			stmt = conn.prepareCall("BEGIN dbms_pipe.unpack_message(?); END;");
+
+			// Define que o parametro e do tipo OUT, retornando
+			// e um VARCHAR, que nesse caso armazena no nome do pipe
+			// de retorno.
+			stmt.registerOutParameter(1, OracleTypes.VARCHAR);
+
+			// Executa a funcao do banco
+			stmt.execute();
+
+			// Recupera os valores retornados do pipe
+			pipeRetorno = stmt.getString(1);
+						
+			// Retorna o status do deamon, informando
+			// que ele esta ativo: DEAMON_ALIVE
+			//dbms_pipe.pack_message(pipe_name);
+			stmt = conn.prepareCall("BEGIN dbms_pipe.pack_message(?); ? := dbms_pipe.send_message(?,2); END;");
+			
+			// Manda para o pipe o status que representa que o
+			// o deamon esta rodando.
+			stmt.setInt(1, DEAMON_ALIVE);
+			stmt.registerOutParameter(2, OracleTypes.NUMBER);			
+			stmt.setString(3, pipeRetorno);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
+	    
 	}
 }
