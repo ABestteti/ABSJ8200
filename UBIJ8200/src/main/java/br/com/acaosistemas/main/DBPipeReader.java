@@ -3,11 +3,9 @@ package br.com.acaosistemas.main;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Types;
 
 import br.com.acaosistemas.db.connection.ConnectionFactory;
 import br.com.acaosistemas.db.connection.DBConnectionInfo;
-import br.com.acaosistemas.db.dao.UBIPoboxXmlDAO;
 import br.com.acaosistemas.db.dao.UBIRuntimesDAO;
 import br.com.acaosistemas.wsclientes.ClienteWSCorreios;
 import oracle.jdbc.OracleTypes;
