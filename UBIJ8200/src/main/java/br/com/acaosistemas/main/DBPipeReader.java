@@ -80,6 +80,11 @@ public class DBPipeReader {
 		// banco de dados.
 		conn = new ConnectionFactory().getConnection();
 		
+		
+		// Antes de iniciar a leitura do pipe, faz a limpeza para descartar mensagens
+		// antigas que por ventura estejam armazenadas nele.
+		resetPipe(pipeName);
+		
 		// Loop forever para leitura constante do pipe de comunicacao
 		// do deamon
 		while (!stopReadingPipe) {
@@ -190,26 +195,12 @@ public class DBPipeReader {
 	
 	private void statusDaemon(String pPipeReturn) {
 		int    pipeStatus  = -1;
-		String pipeRetorno = null;
 		
 	    try {
 			if (!stmt.isClosed()) {
 				stmt.close();
 			}
 			
-			stmt = conn.prepareCall("BEGIN dbms_pipe.unpack_message(?); END;");
-
-			// Define que o parametro e do tipo OUT, retornando
-			// e um VARCHAR, que nesse caso armazena no nome do pipe
-			// de retorno.
-			stmt.registerOutParameter(1, OracleTypes.VARCHAR);
-
-			// Executa a funcao do banco
-			stmt.execute();
-
-			// Recupera os valores retornados do pipe
-			pipeRetorno = stmt.getString(1);
-						
 			// Retorna o status do deamon, informando
 			// que ele esta ativo: DEAMON_ALIVE
 			//dbms_pipe.pack_message(pipe_name);
@@ -219,13 +210,43 @@ public class DBPipeReader {
 			// o deamon esta rodando.
 			stmt.setInt(1, DEAMON_ALIVE);
 			stmt.registerOutParameter(2, OracleTypes.NUMBER);			
-			stmt.setString(3, pipeRetorno);
+			stmt.setString(3, pPipeReturn);
+			
+			stmt.execute();
+			
+			pipeStatus = stmt.getInt(2);
+			
+			stmt.close();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}	    
+	}
+	
+	private void resetPipe(String pPipeName) {
+		int pipeStatus = -1;
+		
+		try {
+			if (!stmt.isClosed()) {
+				stmt.close();
+			}
+			
+			// Limpa o pipe de comunicacao na inicializacao do deamon, descartando
+			// todas as mensagens antigas que estejam por ventura ainda armazenadas no pipe.
+			stmt = conn.prepareCall("BEGIN ? = dbms_pipe.dbms_pipe.remove_pipe(?); END;");
+			
+			stmt.registerOutParameter(1,  OracleTypes.NUMBER);
+			stmt.setString(2,  pPipeName);
+			
+			stmt.execute();
+			
+			pipeStatus = stmt.getInt(1);
+			
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-	    
-	    
 	}
 }
