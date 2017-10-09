@@ -18,8 +18,8 @@ public class ConnectionFactory {
 	        }
 	        
 	        try {
-	        	    // Define o tempo de timeout de conexao com o banco em 240 segundos
-	            	DriverManager.setLoginTimeout(240);
+	        	    // Define o tempo de timeout de conexao com o banco em 10 segundos
+	            	DriverManager.setLoginTimeout(10);
 	            	
 	            	
                  // Retorna uma conexão com o banco de dados.
