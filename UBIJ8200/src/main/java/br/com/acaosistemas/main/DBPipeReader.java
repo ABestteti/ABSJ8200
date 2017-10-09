@@ -60,7 +60,7 @@ public class DBPipeReader {
 	
 	private void pipeReader() {		
 		// Rowid de uma linha da table UBI_POBOX_XML
-		String pipeRowId  = "";
+		String pipeConteudo  = "";
 		
 		// Variaveis para trabalhar com o pipe de banco
 		String pipeName   = "";
@@ -84,6 +84,8 @@ public class DBPipeReader {
 		// Antes de iniciar a leitura do pipe, faz a limpeza para descartar mensagens
 		// antigas que por ventura estejam armazenadas nele.
 		resetPipe(pipeName);
+		
+		System.out.println("Eperando comando...");
 		
 		// Loop forever para leitura constante do pipe de comunicacao
 		// do deamon
@@ -138,7 +140,7 @@ public class DBPipeReader {
 
 					// Recupera os valores retornados do pipe
 					pipeCmd = stmt.getInt(1);
-					pipeRowId = stmt.getString(2);
+					pipeConteudo = stmt.getString(2);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -147,7 +149,7 @@ public class DBPipeReader {
 				case CORREIOS_SERVICE:
 					System.out.println("Recebido comando correios service!");
 					ClienteWSCorreios cws = new ClienteWSCorreios();
-					cws.execWebService(pipeRowId);
+					cws.execWebService(pipeConteudo);
 					break;
 				case ASSINAR_EVT_SERVICE:
 					System.out.println("Recebido comando assinar evento!");
@@ -165,7 +167,7 @@ public class DBPipeReader {
 					// pipe de retorno que sera usado para enviar o status
 					// de volta para o PL/SQL, sinalizando que o daemon esta
 					// rodando.
-					statusDaemon(pipeRowId);
+					statusDaemon(pipeConteudo);
 			     	break;
 				case STOP_DAEMON:
 					System.out.println("Recebido comando stop deamon!");
@@ -228,13 +230,10 @@ public class DBPipeReader {
 		int pipeStatus = -1;
 		
 		try {
-			if (!stmt.isClosed()) {
-				stmt.close();
-			}
 			
 			// Limpa o pipe de comunicacao na inicializacao do deamon, descartando
 			// todas as mensagens antigas que estejam por ventura ainda armazenadas no pipe.
-			stmt = conn.prepareCall("BEGIN ? = dbms_pipe.dbms_pipe.remove_pipe(?); END;");
+			stmt = conn.prepareCall("BEGIN ? := dbms_pipe.remove_pipe(?); END;");
 			
 			stmt.registerOutParameter(1,  OracleTypes.NUMBER);
 			stmt.setString(2,  pPipeName);
