@@ -161,7 +161,7 @@ public class DBPipeReader {
 				case CONSULTAR_STATUS:
 					System.out.println("Recebido comando status deamon!");
 					
-					// Nesse caso o objeto pipeRowid armazena o nome do
+					// Nesse caso o objeto pipeConteudo armazena o nome do
 					// pipe de retorno que sera usado para enviar o status
 					// de volta para o PL/SQL, sinalizando que o daemon esta
 					// rodando.
