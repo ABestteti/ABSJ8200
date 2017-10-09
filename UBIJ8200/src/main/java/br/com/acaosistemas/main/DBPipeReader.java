@@ -191,6 +191,8 @@ public class DBPipeReader {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		System.out.println("Deamon encerrado por requisicao do usuario.");
 	}
 	
 	private void statusDaemon(String pPipeReturn) {
@@ -231,7 +233,7 @@ public class DBPipeReader {
 			
 			// Limpa o pipe de comunicacao na inicializacao do deamon, descartando
 			// todas as mensagens antigas que estejam por ventura ainda armazenadas no pipe.
-			stmt = conn.prepareCall("BEGIN ? := dbms_pipe.remove_pipe(?); END;");
+			stmt = conn.prepareCall("{? = call dbms_pipe.remove_pipe(?)}");
 			
 			stmt.registerOutParameter(1,  OracleTypes.NUMBER);
 			stmt.setString(2,  pPipeName);
