@@ -115,6 +115,9 @@ public class DBPipeReader {
 				e.printStackTrace();
 			}
 			
+			// Se o retorno do pipe foi obtido com sucesso,
+			// busca o comando e o rowid. Para o comando STOP_DAEMON
+			// o rowid sempre retornara a string "NULO".
 			if (pipeStatus == 0) {
 
 				try {
@@ -150,6 +153,7 @@ public class DBPipeReader {
 					System.out.println("Recebido comando consultar lote!");
 					break;
 				case STOP_DAEMON:
+					System.out.println("Recebido comando stop deamon!");
 					stopReadingPipe = true;
 					break;
 				}
