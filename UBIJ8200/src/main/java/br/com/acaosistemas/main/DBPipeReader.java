@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import br.com.acaosistemas.db.connection.ConnectionFactory;
 import br.com.acaosistemas.db.connection.DBConnectionInfo;
 import br.com.acaosistemas.db.dao.UBIRuntimesDAO;
+import br.com.acaosistemas.wsclientes.ClienteWSAssinarEvento;
 import br.com.acaosistemas.wsclientes.ClienteWSCorreios;
 import oracle.jdbc.OracleTypes;
 
@@ -151,6 +152,8 @@ public class DBPipeReader {
 					break;
 				case ASSINAR_EVT_SERVICE:
 					System.out.println("Recebido comando assinar evento!");
+					ClienteWSAssinarEvento cliWsAssinarEvt = new ClienteWSAssinarEvento();
+					cliWsAssinarEvt.execWebService(pipeConteudo);
 					break;
 				case ENVIAR_LOTE_SERVICE:
 					System.out.println("Recebido comando enviar lote!");
