@@ -54,6 +54,9 @@ public class ClienteWSAssinarEvento {
 			
 			HttpURLConnection request = (HttpURLConnection) url.openConnection();			
 
+			// Define que a requisicao pode obter informacoes de retorno.
+		    request.setDoOutput(true);
+						
 			// Define o metodo da requisicao
 			request.setRequestMethod("GET");
 			
