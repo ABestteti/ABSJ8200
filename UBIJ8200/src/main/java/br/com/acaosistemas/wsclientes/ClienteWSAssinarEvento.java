@@ -39,7 +39,7 @@ public class ClienteWSAssinarEvento {
 		// Recupera do banco de dados a informacao do runtime UBIWSASSINAEVT
 		wsEndPoint = runtimeDAO.getRuntimeValue("UBIWSASSINAEVT");
 		
-		// Fecha a conexao com o banco de daos
+		// Fecha a conexao com o banco de dados
 		runtimeDAO.closeConnection();
 		
 		// Recupera do banco de dados as informacoes da tabela
@@ -47,7 +47,8 @@ public class ClienteWSAssinarEvento {
 		ubes = ubesDAO.getUBIEsocialEventosStage(pRowID);
 
 		// Monta o parametro de chamada do web service
-		parametros  = "dtmove="+ubes.getDtMov().toString();
+		// O formato da data deve ser o seguinte: YYYY-MM-DD/HH24:MI:SS.FF
+		parametros  = "dtmove="+ubes.getDtMov();
 		
 		try {
 			URL url = new URL(wsEndPoint+parametros);
