@@ -5,6 +5,9 @@
  * For more details take a look at the Java Libraries chapter in the Gradle
  * user guide available at https://docs.gradle.org/3.5/userguide/java_library_plugin.html
  */
+
+apply plugin: "eclipse" 
+
 apply plugin: "java"
 tasks.withType(JavaCompile) {
   options.encoding = "ISO-8859-1"

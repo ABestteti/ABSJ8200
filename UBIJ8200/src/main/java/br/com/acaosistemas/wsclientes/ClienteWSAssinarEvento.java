@@ -8,6 +8,7 @@ import java.net.URL;
 import br.com.acaosistemas.db.dao.UBIEsocialEventosStageDAO;
 import br.com.acaosistemas.db.dao.UBIRuntimesDAO;
 import br.com.acaosistemas.db.model.UBIEsocialEventosStage;
+import br.com.acaosistemas.frw.util.HttpUtils;
 
 /**
  * @author Anderson Bestteti Santos
@@ -48,7 +49,7 @@ public class ClienteWSAssinarEvento {
 
 		// Monta o parametro de chamada do web service
 		// O formato da data deve ser o seguinte: YYYY-MM-DD/HH24:MI:SS.FF
-		parametros  = "dtmove="+ubes.getDtMov();
+		parametros  = ubes.getDtMov().toString().replaceAll(" ", "/");
 		
 		try {
 			URL url = new URL(wsEndPoint+parametros);
@@ -69,7 +70,7 @@ public class ClienteWSAssinarEvento {
 			}
 			else {
 				System.out.println("HTTP code .....: " + request.getResponseMessage());
-				//System.err.println("Message from ws: " + readResponse(request) + " [" + wsEndPoint + "]");
+				System.err.println("Message from ws: " + HttpUtils.readResponse(request) + " [" + wsEndPoint + "]");
 			}
 						
 		} catch (MalformedURLException e) {

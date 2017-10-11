@@ -14,6 +14,7 @@ import java.net.URL;
 import br.com.acaosistemas.db.dao.UBIPoboxXmlDAO;
 import br.com.acaosistemas.db.dao.UBIRuntimesDAO;
 import br.com.acaosistemas.db.model.UBIPoboxXml;
+import br.com.acaosistemas.frw.util.HttpUtils;
 
 /**
  * @author Anderson Bestteti Santos
@@ -102,7 +103,7 @@ public class ClienteWSCorreios {
 			}
 			else {
 				System.out.println("HTTP code .....: " + request.getResponseMessage());
-				System.err.println("Message from ws: " + readResponse(request) + " [" + wsEndPoint + "]");
+				System.err.println("Message from ws: " + HttpUtils.readResponse(request) + " [" + wsEndPoint + "]");
 			}
 			
 		} catch (MalformedURLException e) {
@@ -110,23 +111,5 @@ public class ClienteWSCorreios {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	/***
-	 * Recupera a mensagem de retorno do webservice.
-	 * @param request
-	 * @return String contendo a mensagem de retorno do webservice
-	 * @throws IOException
-	 */
-	private String readResponse(HttpURLConnection request) throws IOException {
-	    ByteArrayOutputStream os;
-	    try (InputStream is = request.getInputStream()) {
-	        os = new ByteArrayOutputStream();
-	        int b;
-	        while ((b = is.read()) != -1) {
-	            os.write(b);
-	        }
-	    }
-	    return new String(os.toByteArray());
 	}
 }
