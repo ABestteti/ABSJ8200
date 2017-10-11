@@ -7,7 +7,6 @@ import java.sql.SQLException;
 
 import br.com.acaosistemas.db.connection.ConnectionFactory;
 import br.com.acaosistemas.db.model.UBIEsocialEventosStage;
-import br.com.acaosistemas.db.model.UBIPoboxXml;
 
 public class UBIEsocialEventosStageDAO {
 

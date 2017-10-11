@@ -81,11 +81,6 @@ public class DBPipeReader {
 		// banco de dados.
 		conn = new ConnectionFactory().getConnection();
 		
-		
-		// Antes de iniciar a leitura do pipe, faz a limpeza para descartar mensagens
-		// antigas que por ventura estejam armazenadas nele.
-		resetPipe(pipeName);
-		
 		System.out.println("Eperando comando...");
 		
 		// Loop forever para leitura constante do pipe de comunicacao
