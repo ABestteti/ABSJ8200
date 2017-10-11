@@ -8,7 +8,9 @@ import br.com.acaosistemas.db.connection.ConnectionFactory;
 import br.com.acaosistemas.db.connection.DBConnectionInfo;
 import br.com.acaosistemas.db.dao.UBIRuntimesDAO;
 import br.com.acaosistemas.wsclientes.ClienteWSAssinarEvento;
+import br.com.acaosistemas.wsclientes.ClienteWSConsultarLote;
 import br.com.acaosistemas.wsclientes.ClienteWSCorreios;
+import br.com.acaosistemas.wsclientes.ClienteWSEnviarLote;
 import oracle.jdbc.OracleTypes;
 
 /**
@@ -157,9 +159,13 @@ public class DBPipeReader {
 					break;
 				case ENVIAR_LOTE_SERVICE:
 					System.out.println("Recebido comando enviar lote!");
+					ClienteWSEnviarLote cliWsEnviaLoteEvt = new ClienteWSEnviarLote();
+					cliWsEnviaLoteEvt.execWebService(pipeConteudo);
 					break;
 				case CONSULTAR_LOTE_SERVICE:
 					System.out.println("Recebido comando consultar lote!");
+					ClienteWSConsultarLote cliWsConsLoteEvt = new ClienteWSConsultarLote();
+					cliWsConsLoteEvt.execWebService(pipeConteudo);
 					break;
 				case CONSULTAR_STATUS:
 					System.out.println("Recebido comando status deamon!");
