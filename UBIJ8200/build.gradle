@@ -5,16 +5,29 @@
  * For more details take a look at the Java Libraries chapter in the Gradle
  * user guide available at https://docs.gradle.org/3.5/userguide/java_library_plugin.html
  */
-
+// Apply the java-library plugin to add support for Java Library
+apply plugin: 'java-library'
+apply plugin: 'java-library-distribution'
 apply plugin: "eclipse" 
-
 apply plugin: "java"
+
+version = '1.0'
+
 tasks.withType(JavaCompile) {
   options.encoding = "ISO-8859-1"
 }
 
-// Apply the java-library plugin to add support for Java Library
-apply plugin: 'java-library'
+//create a single Jar with all dependencies
+task fatJar(type: Jar) {
+	manifest {
+        attributes 'Implementation-Title': 'UBIJ8200 - Cliente dos web services do UBI',
+        	 'Implementation-Version': version,
+        	 'Main-Class': 'br.com.acaosistemas.main.DBPipeReader'
+    }
+    baseName = rootProject.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
 
 // In this section you declare where to find the dependencies of your project
 repositories {    
@@ -38,4 +51,20 @@ dependencies {
     compile files('lib/ojdbc7.jar')
 }
 
-  
+ // Task "distZip" added by plugin "java-library-distribution":
+distZip.shouldRunAfter(build)
+
+jar {
+    // Keep jar clean:
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.MF'
+
+    manifest {
+        attributes 'Implementation-Title': 'UBIJ8200 - Cliente dos web services do UBI',
+        	           'Implementation-Version': version,
+        	           'Main-Class': 'br.com.acaosistemas.main.DBPipeReader',
+                   'Class-Path': configurations.runtime.files.collect { "lib/$it.name" }.join(' ')
+    }
+    // How-to add class path:
+    //     https://stackoverflow.com/questions/22659463/add-classpath-in-manifest-using-gradle
+    //     https://gist.github.com/simon04/6865179
+}

@@ -1,2 +1,6 @@
 Manifest-Version: 1.0
+Implementation-Title: UBIJ8200 - Cliente dos web services do UBI
+Implementation-Version: 1.0
+Class-Path: lib/ojdbc7.jar
+Main-Class: br.com.acaosistemas.main.DBPipeReader
 
