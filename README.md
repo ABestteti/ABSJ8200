@@ -1,2 +1,2 @@
 # UBIJ8200
-Java client for web services
+A Java client for web services
