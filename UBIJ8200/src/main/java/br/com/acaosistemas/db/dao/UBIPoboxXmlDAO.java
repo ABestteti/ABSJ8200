@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.acaosistemas.db.connection.ConnectionFactory;
 import br.com.acaosistemas.db.enumeration.StatusPoboxXMLEnum;
@@ -60,4 +62,38 @@ public class UBIPoboxXmlDAO {
 		return ubpx;
 	}
 	
+	public List<UBIPoboxXml> listPoboxXml() {
+		
+		PreparedStatement stmt = null;
+		List<UBIPoboxXml> lista = new ArrayList<UBIPoboxXml>();		
+		try {
+			stmt = conn.prepareStatement(
+					"SELECT ubpx.dt_mov, ubpx.status, ubpx.tipo_recurso, ubpx.ws_endpoint, ubpx.table_name, ubpx.nome_tapi, ubpx.sistema_remetente, ubpx.sistema_destinatario, ubpx.xml FROM ubi_pobox_xml ubpx WHERE ubpx.status = ?");
+			
+			stmt.setInt(1, 0);
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			while (rs.next()) {
+				UBIPoboxXml ubpx = new UBIPoboxXml();
+				
+				ubpx.setId(rs.getTimestamp("dt_mov"));
+				ubpx.setStatus(StatusPoboxXMLEnum.getById(rs.getInt("status")));
+				ubpx.setTipoRecurso(TipoRecursoPoboxXMLEnum.getById(rs.getString("tipo_recurso")));
+				ubpx.setWsEndpoint(rs.getString("ws_endpoint"));
+				ubpx.setTableName("table_name");
+				ubpx.setNomeTapi(rs.getString("nome_tapi"));
+				ubpx.setSistemaRemetente(rs.getString("sistema_remetente"));
+				ubpx.setSistemaDestinatario(rs.getString("sistema_destinatario"));
+				ubpx.setXml(rs.getString("xml"));
+				
+				lista.add(ubpx);
+			}
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
+		return lista;
+	}
 }
