@@ -7,10 +7,10 @@
  *
  */
 // Apply the java-library plugin to add support for Java Library
-apply plugin: 'java-library'
-apply plugin: 'java-library-distribution'
 apply plugin: "eclipse" 
 apply plugin: "java"
+apply plugin: 'java-library'
+apply plugin: 'java-library-distribution'
 
 
 version = '1.0'
