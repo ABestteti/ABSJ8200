@@ -36,18 +36,19 @@ public class UBIPoboxXmlDAO {
 		
 		try {
 			stmt = conn.prepareStatement(
-					"SELECT ubpx.dt_mov, ubpx.status, ubpx.tipo_recurso, ubpx.ws_endpoint, ubpx.table_name, ubpx.nome_tapi, ubpx.sistema_remetente, ubpx.sistema_destinatario, ubpx.xml FROM ubi_pobox_xml ubpx WHERE ubpx.rowid = ?");
+					"SELECT ubpx.rowid, ubpx.dt_mov, ubpx.status, ubpx.tipo_recurso, ubpx.ws_endpoint, ubpx.table_name, ubpx.nome_tapi, ubpx.sistema_remetente, ubpx.sistema_destinatario, ubpx.xml FROM ubi_pobox_xml ubpx WHERE ubpx.rowid = ?");
 		
 			stmt.setString(1, pRowID);
 			
 			ResultSet rs = stmt.executeQuery();
 			
 			while (rs.next()) {
+				ubpx.setRowId(rs.getString("rowid"));
 				ubpx.setId(rs.getTimestamp("dt_mov"));
 				ubpx.setStatus(StatusPoboxXMLEnum.getById(rs.getInt("status")));
 				ubpx.setTipoRecurso(TipoRecursoPoboxXMLEnum.getById(rs.getString("tipo_recurso")));
 				ubpx.setWsEndpoint(rs.getString("ws_endpoint"));
-				ubpx.setTableName("table_name");
+				ubpx.setTableName(rs.getString("table_name"));
 				ubpx.setNomeTapi(rs.getString("nome_tapi"));
 				ubpx.setSistemaRemetente(rs.getString("sistema_remetente"));
 				ubpx.setSistemaDestinatario(rs.getString("sistema_destinatario"));
@@ -55,33 +56,40 @@ public class UBIPoboxXmlDAO {
 			}
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		
 		return ubpx;
 	}
 	
+	/**
+	 * Recupera todos os registros da tabela UBI_POBOX_XML cujo status seja
+	 * nao processado (0).
+	 * 
+	 * @return
+	 * Retorna uma lista com os registros retornados pela consulta.
+	 */
 	public List<UBIPoboxXml> listPoboxXml() {
 		
 		PreparedStatement stmt = null;
 		List<UBIPoboxXml> lista = new ArrayList<UBIPoboxXml>();		
 		try {
 			stmt = conn.prepareStatement(
-					"SELECT ubpx.dt_mov, ubpx.status, ubpx.tipo_recurso, ubpx.ws_endpoint, ubpx.table_name, ubpx.nome_tapi, ubpx.sistema_remetente, ubpx.sistema_destinatario, ubpx.xml FROM ubi_pobox_xml ubpx WHERE ubpx.status = ?");
+					"SELECT ubpx.rowid, ubpx.dt_mov, ubpx.status, ubpx.tipo_recurso, ubpx.ws_endpoint, ubpx.table_name, ubpx.nome_tapi, ubpx.sistema_remetente, ubpx.sistema_destinatario, ubpx.xml FROM ubi_pobox_xml ubpx WHERE ubpx.status = ?");
 			
-			stmt.setInt(1, 0);
+			stmt.setInt(1, StatusPoboxXMLEnum.NAO_PROCESSADO.getId());
 			
 			ResultSet rs = stmt.executeQuery();
 			
 			while (rs.next()) {
 				UBIPoboxXml ubpx = new UBIPoboxXml();
 				
+				ubpx.setRowId(rs.getString("rowId"));
 				ubpx.setId(rs.getTimestamp("dt_mov"));
 				ubpx.setStatus(StatusPoboxXMLEnum.getById(rs.getInt("status")));
 				ubpx.setTipoRecurso(TipoRecursoPoboxXMLEnum.getById(rs.getString("tipo_recurso")));
 				ubpx.setWsEndpoint(rs.getString("ws_endpoint"));
-				ubpx.setTableName("table_name");
+				ubpx.setTableName(rs.getString("table_name"));
 				ubpx.setNomeTapi(rs.getString("nome_tapi"));
 				ubpx.setSistemaRemetente(rs.getString("sistema_remetente"));
 				ubpx.setSistemaDestinatario(rs.getString("sistema_destinatario"));

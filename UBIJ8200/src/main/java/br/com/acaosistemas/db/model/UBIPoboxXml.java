@@ -16,6 +16,7 @@ public class UBIPoboxXml {
     private TipoRecursoPoboxXMLEnum tipoRecurso;
     private String wsEndpoint;
     private String xml;
+    private String rowId;
     
 	public Timestamp getId() {
 		return id;
@@ -70,5 +71,11 @@ public class UBIPoboxXml {
 	}
 	public void setXml(String xml) {
 		this.xml = xml;
+	}
+	public String getRowId() {
+		return rowId;
+	}
+	public void setRowId(String rowId) {
+		this.rowId = rowId;
 	}               
 }
