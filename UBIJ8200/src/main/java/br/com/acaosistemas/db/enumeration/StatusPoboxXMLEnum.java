@@ -19,7 +19,7 @@ public enum StatusPoboxXMLEnum implements BaseEnum<Integer> {
     /**
      * Indica que houve um erro na integracao do XML da P. O. Box.
      */
-    ERRO_NA_INTREGACAO(198, "Erro no processamento - irrecuperável");
+    ERRO_NA_INTREGACAO(199, "Erro no processamento - irrecuperável");
 
     private Integer id;
     private String descricao;
