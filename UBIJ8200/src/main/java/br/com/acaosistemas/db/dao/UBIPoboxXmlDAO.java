@@ -64,10 +64,10 @@ public class UBIPoboxXmlDAO {
 	
 	/**
 	 * Recupera todos os registros da tabela UBI_POBOX_XML cujo status seja
-	 * nao processado (0).
+	 * A_TRANSMITIR (101).
 	 * 
 	 * @return
-	 * Retorna uma lista com os registros retornados pela consulta.
+	 * Retorna uma lista com os registros recuperados pela consulta SQL.
 	 */
 	public List<UBIPoboxXml> listPoboxXml() {
 		
@@ -77,7 +77,7 @@ public class UBIPoboxXmlDAO {
 			stmt = conn.prepareStatement(
 					"SELECT ubpx.rowid, ubpx.dt_mov, ubpx.status, ubpx.tipo_recurso, ubpx.ws_endpoint, ubpx.table_name, ubpx.nome_tapi, ubpx.sistema_remetente, ubpx.sistema_destinatario, ubpx.xml FROM ubi_pobox_xml ubpx WHERE ubpx.status = ?");
 			
-			stmt.setInt(1, StatusPoboxXMLEnum.NAO_PROCESSADO.getId());
+			stmt.setInt(1, StatusPoboxXMLEnum.A_TRANSMITIR.getId());
 			
 			ResultSet rs = stmt.executeQuery();
 			
@@ -103,5 +103,25 @@ public class UBIPoboxXmlDAO {
 		}
 		
 		return listaUbiPoboxXml;
+	}
+	
+	public void updateStatus(StatusPoboxXMLEnum pUbpxStatus, String pRowId) {
+		ubpx                   = new UBIPoboxXml();
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = conn.prepareStatement(
+					"UPDATE ubi_pobox_xml ubpx SET ubpx.status = ? WHERE ubpx.rowid = ?");
+		
+			stmt.setInt(1, pUbpxStatus.getId());
+			stmt.setString(2, pRowId);
+			
+			stmt.execute();
+			stmt.close();
+			
+			
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}		
 	}
 }

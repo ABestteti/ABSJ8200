@@ -5,21 +5,35 @@ import br.com.acaosistemas.frw.enumeration.BaseEnum;
 /**
  * Enum para o dominio de UBI_POBOX_XML.status
  *
- * @author Cleber da Silveira.
+ * @author Cleber da Silveira - versao original
+ * @author Anderson Bestteti - alteracoes
  */
 public enum StatusPoboxXMLEnum implements BaseEnum<Integer> {
+
     /**
-     * Indica que o XML da P. O. Box n√£o foi processado.
+     * Indica que o XML da P. O. Box nao foi processado.
      */
-    NAO_PROCESSADO(101, "N„o Processado"),
+    NAO_PROCESSADO(0, "N„o Processado"),
+	
+	/**
+     * Indica que o XML da P. O. Box esta pronto para transmitir.
+     */
+    A_TRANSMITIR(101, "A transmitir"),
+ 
+    /**
+     * Indica que o XML da P. O. Box esta pronto para transmitir.
+     */
+    ERRO_PROCESSAMENTO_RECUPERAVEL(196, "Erro no processamento - recuper·vel"),
+
     /**
      * Indica que o XML da P. O. Box foi processado com sucesso.
      */
-    PROCESSADO_COM_SUCESSO(198, "Processamento com sucesso"),
+    PROCESSAMENTO_COM_SUCESSO(198, "Processamento com sucesso"),
+    
     /**
      * Indica que houve um erro na integracao do XML da P. O. Box.
      */
-    ERRO_NA_INTREGACAO(199, "Erro no processamento - irrecuper·vel");
+    ERRO_PROCESSAMENTO_IRRECUPERAVEL(199, "Erro no processamento - irrecuper·vel");
 
     private Integer id;
     private String descricao;
