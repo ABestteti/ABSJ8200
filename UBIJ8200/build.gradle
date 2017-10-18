@@ -23,7 +23,7 @@ task fatJar(type: Jar) {
 	manifest {
         attributes 'Implementation-Title': 'UBIJ8200 - Cliente dos web services do UBI',
         	 'Implementation-Version': version,
-        	 'Main-Class': 'br.com.acaosistemas.main.DBPipeReader'
+        	 'Main-Class': 'br.com.acaosistemas.main.Deamon'
     }
     baseName = rootProject.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
@@ -64,7 +64,7 @@ jar {
     manifest {
         attributes 'Implementation-Title': 'UBIJ8200 - Cliente dos web services do UBI',
         	           'Implementation-Version': version,
-        	           'Main-Class': 'br.com.acaosistemas.main.DBPipeReader',
+        	           'Main-Class': 'br.com.acaosistemas.main.Daemon',
                    'Class-Path': configurations.runtime.files.collect { "lib/$it.name" }.join(' ')
     }
     // How-to add class path:
