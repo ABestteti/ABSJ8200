@@ -11,6 +11,7 @@ import java.net.URL;
 
 import br.com.acaosistemas.db.dao.UBIPoboxXmlDAO;
 import br.com.acaosistemas.db.dao.UBIRuntimesDAO;
+import br.com.acaosistemas.db.enumeration.StatusPoboxXMLEnum;
 import br.com.acaosistemas.db.model.UBIPoboxXml;
 import br.com.acaosistemas.frw.util.HttpUtils;
 
@@ -56,6 +57,10 @@ public class ClienteWSCorreios {
 		// Recupera do banco de dados as informacoes da tabela
 		// UBI_POBOX_XML
 		ubpx = ubpxDAO.getUBIPoboxXML(pRowID);
+		
+		// Antes de invocar o web service o atributo Status precisa ser
+		// ajustado para NAO_PROCESSADO;
+		ubpx.setStatus(StatusPoboxXMLEnum.NAO_PROCESSADO);
 		
 		parametros  = "nomeTapi=" + ubpx.getNomeTapi() + "&";
 		parametros += "sistemaDestinatario=" + ubpx.getSistemaDestinatario() + "&";
