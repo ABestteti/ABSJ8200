@@ -15,11 +15,11 @@ public enum StatusPoboxXMLEnum implements BaseEnum<Integer> {
     /**
      * Indica que o XML da P. O. Box foi processado com sucesso.
      */
-    PROCESSADO_COM_SUCESSO(198, "Processado com sucesso"),
+    PROCESSADO_COM_SUCESSO(198, "Processamento com sucesso"),
     /**
      * Indica que houve um erro na integracao do XML da P. O. Box.
      */
-    ERRO_NA_INTREGACAO(198, "Erro na integração");
+    ERRO_NA_INTREGACAO(198, "Erro no processamento - irrecuperável");
 
     private Integer id;
     private String descricao;
