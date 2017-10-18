@@ -112,17 +112,19 @@ public class Deamon {
 
 				try {
 					
-					stmt = conn.prepareCall("BEGIN dbms_pipe.unpack_message(?); END;");
+					stmt = conn.prepareCall("BEGIN dbms_pipe.unpack_message(?); dbms_pipe.unpack_message(?); END;");
 
 					// Define que o parametro e do tipo OUT, retornando um NUMBER
 					// e um VARCHAR, respectivamente.
-					stmt.registerOutParameter(1, OracleTypes.VARCHAR);
+					stmt.registerOutParameter(1, OracleTypes.NUMBER);
+					stmt.registerOutParameter(2, OracleTypes.VARCHAR);
 
 					// Executa a funcao do banco
 					stmt.execute();
 
 					// Recupera os valores retornados do pipe
-					pipeConteudo = stmt.getString(1)
+					pipeCmd = stmt.getInt(1);
+					pipeConteudo = stmt.getString(2);
 							;
 				} catch (SQLException e) {
 					throw new RuntimeException(e);
