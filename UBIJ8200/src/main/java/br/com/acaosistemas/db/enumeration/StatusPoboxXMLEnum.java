@@ -11,7 +11,7 @@ public enum StatusPoboxXMLEnum implements BaseEnum<Integer> {
     /**
      * Indica que o XML da P. O. Box n√£o foi processado.
      */
-    NAO_PROCESSADO(0, "N„o Processado"),
+    NAO_PROCESSADO(101, "N„o Processado"),
     /**
      * Indica que o XML da P. O. Box foi processado com sucesso.
      */

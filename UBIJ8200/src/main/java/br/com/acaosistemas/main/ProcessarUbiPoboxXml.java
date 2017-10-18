@@ -10,12 +10,11 @@ import br.com.acaosistemas.wsclientes.ClienteWSCorreios;
 public class ProcessarUbiPoboxXml {
 
 	public ProcessarUbiPoboxXml() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public void lerRegistrosNaoProcessados() {
-		ClienteWSCorreios clientWS  = new ClienteWSCorreios();
-		UBIPoboxXmlDAO ubpxDAO      = new UBIPoboxXmlDAO();
+		ClienteWSCorreios clientWS = new ClienteWSCorreios();
+		UBIPoboxXmlDAO ubpxDAO     = new UBIPoboxXmlDAO();
 		
 		List<UBIPoboxXml> listaUbiPoboxXml = new ArrayList<UBIPoboxXml>();
 		listaUbiPoboxXml = ubpxDAO.listPoboxXml();
