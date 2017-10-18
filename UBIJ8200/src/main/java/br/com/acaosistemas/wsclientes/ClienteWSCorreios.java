@@ -127,7 +127,11 @@ public class ClienteWSCorreios {
 		
 		// Fecha a conexao com o banco de daos
 		runtimeDAO.closeConnection();
-			
+		
+		// Antes de invocar o web service o atributo Status precisa ser
+		// ajustado para NAO_PROCESSADO;
+		pUbpxRow.setStatus(StatusPoboxXMLEnum.NAO_PROCESSADO);
+		
 		parametros  = "nomeTapi=" + pUbpxRow.getNomeTapi() + "&";
 		parametros += "sistemaDestinatario=" + pUbpxRow.getSistemaDestinatario() + "&";
 		parametros += "sistemaRemetente=" + pUbpxRow.getSistemaRemetente() + "&";
