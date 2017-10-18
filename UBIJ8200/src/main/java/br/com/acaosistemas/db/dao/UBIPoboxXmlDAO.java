@@ -71,8 +71,8 @@ public class UBIPoboxXmlDAO {
 	 */
 	public List<UBIPoboxXml> listPoboxXml() {
 		
-		PreparedStatement stmt = null;
-		List<UBIPoboxXml> lista = new ArrayList<UBIPoboxXml>();		
+		PreparedStatement stmt             = null;
+		List<UBIPoboxXml> listaUbiPoboxXml = new ArrayList<UBIPoboxXml>();		
 		try {
 			stmt = conn.prepareStatement(
 					"SELECT ubpx.rowid, ubpx.dt_mov, ubpx.status, ubpx.tipo_recurso, ubpx.ws_endpoint, ubpx.table_name, ubpx.nome_tapi, ubpx.sistema_remetente, ubpx.sistema_destinatario, ubpx.xml FROM ubi_pobox_xml ubpx WHERE ubpx.status = ?");
@@ -95,13 +95,13 @@ public class UBIPoboxXmlDAO {
 				ubpx.setSistemaDestinatario(rs.getString("sistema_destinatario"));
 				ubpx.setXml(rs.getString("xml"));
 				
-				lista.add(ubpx);
+				listaUbiPoboxXml.add(ubpx);
 			}
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 		
-		return lista;
+		return listaUbiPoboxXml;
 	}
 }

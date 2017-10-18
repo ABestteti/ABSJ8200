@@ -110,4 +110,70 @@ public class ClienteWSCorreios {
 			e.printStackTrace();
 		}
 	}
+	
+	public void execWebService(UBIPoboxXml pUbpxRow) {
+		String parametros = new String();
+		String wsEndPoint;
+				
+		UBIRuntimesDAO runtimeDAO = new UBIRuntimesDAO();
+		
+		// Recupera do banco de dados a informacao do runtime UBIWSINSPOBOXXML
+		wsEndPoint = runtimeDAO.getRuntimeValue("UBIWSINSPOBOXXML");
+		
+		// Fecha a conexao com o banco de daos
+		runtimeDAO.closeConnection();
+			
+		parametros  = "nomeTapi=" + pUbpxRow.getNomeTapi() + "&";
+		parametros += "sistemaDestinatario=" + pUbpxRow.getSistemaDestinatario() + "&";
+		parametros += "sistemaRemetente=" + pUbpxRow.getSistemaRemetente() + "&";
+		parametros += "wsEndpoint=" + pUbpxRow.getWsEndpoint() + "&";
+		parametros += "tableName=" + pUbpxRow.getTableName() + "&";
+		parametros += "status=" + pUbpxRow.getStatus().getId() + "&";
+		parametros += "tipoRecurso=" + pUbpxRow.getTipoRecurso().getId();
+		
+		try {
+			
+			URL url = new URL(wsEndPoint+parametros);
+			
+			HttpURLConnection request = (HttpURLConnection) url.openConnection();			
+
+			// Define que a conexao pode enviar informacoes e obte-las de volta:
+			request.setDoOutput(true);
+			request.setDoInput(true);
+			
+			// Define o content-type para trabalhar com o corpo da mensagem HTTP em
+			// formato octet-stream, pois o web service da POBOX espera receber esse
+			// formato para manter intacto o formato UTF-8 do XML.
+			request.setRequestProperty("Content-Type", "application/octet-stream");
+			
+			request.setRequestProperty("Content-Length", String.valueOf(pUbpxRow.getXml().length()));
+			
+			request.setRequestProperty("Transfer-Encoding", "chunked");
+			
+			// Define o metodo da requisicao
+			request.setRequestMethod("POST");
+			
+			// Conecta na URL
+			request.connect();
+			
+			// Escreve o objeto XML usando o OutputStream da requisicao:
+			// para enviar para o web service.
+            try (OutputStream outputStream = request.getOutputStream()) {
+            	outputStream.write(pUbpxRow.getXml().getBytes("UTF-8"));
+            }
+			
+			if (request.getResponseCode() != HttpURLConnection.HTTP_OK) {
+				throw new RuntimeException("HTTP error code : "+ request.getResponseCode() + " [" + wsEndPoint + "]");
+			}
+			else {
+				System.out.println("HTTP code .....: " + request.getResponseMessage());
+				System.err.println("Message from ws: " + HttpUtils.readResponse(request) + " [" + wsEndPoint + "]");
+			}
+			
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

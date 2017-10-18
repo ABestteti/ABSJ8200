@@ -13,7 +13,7 @@ import br.com.acaosistemas.wsclientes.ClienteWSCorreios;
 import br.com.acaosistemas.wsclientes.ClienteWSEnviarLote;
 import oracle.jdbc.OracleTypes;
 
-public class ProcessaUBIPoboxXml {
+public class Deamon {
 
 	private static final int STOP_DAEMON            = 4;
 	private static final int CONSULTAR_STATUS       = 5;
@@ -23,13 +23,13 @@ public class ProcessaUBIPoboxXml {
 	private Connection conn;
 	private CallableStatement stmt;
 	
-	public ProcessaUBIPoboxXml() {
+	public Deamon() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public static void main(String[] args) {
 
-		ProcessaUBIPoboxXml procPoboxXml = new ProcessaUBIPoboxXml();
+		Deamon procPoboxXml = new Deamon();
 		
 		String dbUserName = args[0];
 		String dbPassWord = args[1];
@@ -41,10 +41,13 @@ public class ProcessaUBIPoboxXml {
 		DBConnectionInfo.setDbUserName(dbUserName);
 		DBConnectionInfo.setDbPassWord(dbPassWord);
 		DBConnectionInfo.setDbStrConnect(dbStrConn);
+		
+		// Entra no loop de leitura da tabela UBI_POBOX_XML
+		procPoboxXml.lerPipeDB();
 
 	}
 	
-    private void lerRegistrosPoboxXml() {
+    private void lerPipeDB() {
 		// Rowid de uma linha da table UBI_POBOX_XML
 		String pipeConteudo  = "";
 		
@@ -54,7 +57,7 @@ public class ProcessaUBIPoboxXml {
 		int    pipeStatus = -1;
 		
 		// Controla o loop de leitura do PIPE
-		boolean stopQuerying = false;
+		boolean stopDeamon = false;
 		
 		// Objects de acesso as tabelas do banco de dados
 		UBIRuntimesDAO runtimeDAO = new UBIRuntimesDAO();
@@ -68,9 +71,10 @@ public class ProcessaUBIPoboxXml {
 		
 		System.out.println("Processando registros dos correios...");
 		
-		// Loop forever para leitura constante do pipe de comunicacao
-		// do deamon
-		while (!stopQuerying) {
+		// Loop para leitura constante do pipe de comunicacao
+		// do deamon e por procura de registros com status 0 (nao processado)
+		// na tabela UBI_POBOX_XML
+		while (!stopDeamon) {
 			
 			// Pausa a execucao da thread principal por 0.5 segundos
 			// Com iso, e liberado o lock da dbms_pipe, permitindo que a 
@@ -99,36 +103,34 @@ public class ProcessaUBIPoboxXml {
 				pipeStatus = stmt.getInt(1);
 
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 			
-			// Se o retorno do pipe foi obtido com sucesso,
-			// busca o comando e o rowid. Para o comando STOP_DAEMON
-			// o rowid sempre retornara a string "NULO".
+			// Se o retorno do pipe foi obtido com sucesso (valor 0),
+			// busca o comando enviado.
 			if (pipeStatus == 0) {
 
 				try {
-					stmt = conn.prepareCall("BEGIN dbms_pipe.unpack_message(?); dbms_pipe.unpack_message(?); END;");
+					
+					stmt = conn.prepareCall("BEGIN dbms_pipe.unpack_message(?); END;");
 
 					// Define que o parametro e do tipo OUT, retornando um NUMBER
 					// e um VARCHAR, respectivamente.
-					stmt.registerOutParameter(1, OracleTypes.NUMBER);
-					stmt.registerOutParameter(2, OracleTypes.VARCHAR);
+					stmt.registerOutParameter(1, OracleTypes.VARCHAR);
 
 					// Executa a funcao do banco
 					stmt.execute();
 
 					// Recupera os valores retornados do pipe
-					pipeCmd = stmt.getInt(1);
-					pipeConteudo = stmt.getString(2);
+					pipeConteudo = stmt.getString(1)
+							;
 				} catch (SQLException e) {
-					e.printStackTrace();
+					throw new RuntimeException(e);
 				}
 
 				switch (pipeCmd) {
 				case CONSULTAR_STATUS:
-					System.out.println("Recebido comando status deamon!");
+					System.out.println("Recebido comando status do servico!");
 					
 					// Nesse caso o objeto pipeConteudo armazena o nome do
 					// pipe de retorno que sera usado para enviar o status
@@ -137,8 +139,8 @@ public class ProcessaUBIPoboxXml {
 					statusDaemon(pipeConteudo);
 			     	break;
 				case STOP_DAEMON:
-					System.out.println("Recebido comando stop deamon!");
-					stopQuerying = true;
+					System.out.println("Recebido comando stop do servico!");
+					stopDeamon = true;
 					break;
 				}
 			}
@@ -163,9 +165,7 @@ public class ProcessaUBIPoboxXml {
 	}
 	
 	private void statusDaemon(String pPipeReturn) {
-		int    pipeStatus  = -1;
-		
-	    try {
+		try {
 			if (!stmt.isClosed()) {
 				stmt.close();
 			}
@@ -183,13 +183,10 @@ public class ProcessaUBIPoboxXml {
 			
 			stmt.execute();
 			
-			pipeStatus = stmt.getInt(2);
-			
 			stmt.close();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}	    
 	}
 }
