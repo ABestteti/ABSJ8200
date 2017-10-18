@@ -152,6 +152,10 @@ public class Deamon {
 			} catch (SQLException e) {
 				throw new RuntimeException(e) ;
 			}
+			
+			// Inicia o processo de leitura dos registros não processados
+			// na tabela UBI_POBOX_XML
+			new ProcessarUbiPoboxXml().lerRegistrosNaoProcessados();
 		}
 		
 		try {
