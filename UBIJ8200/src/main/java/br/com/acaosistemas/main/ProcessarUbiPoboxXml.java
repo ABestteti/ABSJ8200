@@ -1,5 +1,7 @@
 package br.com.acaosistemas.main;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,20 +22,36 @@ public class ProcessarUbiPoboxXml {
 		
 		listaUbiPoboxXml = ubpxDAO.listPoboxXml();
 				
-		System.out.println("Processando registros da UBI_POBOX_XML...");
+		System.out.println("   Processando registros da UBI_POBOX_XML...");
 		
 		for (UBIPoboxXml ubpxRow : listaUbiPoboxXml) {
 			
-			System.out.println("Processando rowId: "+ubpxRow.getRowId());
-			clientWS.execWebService(ubpxRow);
+			System.out.println("     Processando rowId: "+ubpxRow.getRowId());
 			
-			// Atualiza o status da tabela UBI_POBOX_XML para
-			// PROCESSAMENTO_COM_SUCESSO (198)
-			ubpxRow.setStatus(StatusPoboxXMLEnum.PROCESSAMENTO_COM_SUCESSO);
-			ubpxDAO.updateStatus(ubpxRow);
+			
+			try {
+				clientWS.execWebService(ubpxRow);
+				
+				// Atualiza o status da tabela UBI_POBOX_XML para
+				// PROCESSAMENTO_COM_SUCESSO (198)
+				ubpxRow.setStatus(StatusPoboxXMLEnum.PROCESSAMENTO_COM_SUCESSO);
+				ubpxDAO.updateStatus(ubpxRow);
+			} catch (MalformedURLException e) {
+				// Caso a chamada do web service do correio retornar a excecao
+				// MalformedURLException, faz a atualizacao do status com o
+		        // valor apropriado
+				ubpxRow.setStatus(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_RECUPERAVEL);
+				ubpxDAO.updateStatus(ubpxRow);	
+			} catch (IOException e) {
+				// Caso a chamada do web service do correio retornar a excecao
+				// IOException, faz a atualizacao do status com o
+		        // valor apropriado
+				ubpxRow.setStatus(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_IRRECUPERAVEL);
+				ubpxDAO.updateStatus(ubpxRow);				
+			}
 		}
 		
 		ubpxDAO.closeConnection();
-		System.out.println("Finalizado processomento da UBI_POBOX_XML.");
+		System.out.println("   Finalizado processomento da UBI_POBOX_XML.");
 	}
 }

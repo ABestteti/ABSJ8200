@@ -116,7 +116,7 @@ public class ClienteWSCorreios {
 		}
 	}
 	
-	public void execWebService(UBIPoboxXml pUbpxRow) {
+	public void execWebService(UBIPoboxXml pUbpxRow) throws MalformedURLException, IOException {
 		String parametros = new String();
 		String wsEndPoint;
 				
@@ -172,17 +172,25 @@ public class ClienteWSCorreios {
             }
 			
 			if (request.getResponseCode() != HttpURLConnection.HTTP_OK) {
-				throw new RuntimeException("HTTP error code : "+ request.getResponseCode() + " [" + wsEndPoint + "]");
+			    System.out.println("HTTP error code : "+ request.getResponseCode() + " [" + wsEndPoint + "]");
+				//System.out.println("Message from ws: " + HttpUtils.readResponse(request) + " [" + wsEndPoint + "]");
+			    
+			    if (request.getResponseCode() == HttpURLConnection.HTTP_INTERNAL_ERROR) {
+				    throw new MalformedURLException("HTTP error code : "+ request.getResponseCode() + " [" + wsEndPoint + "]");
+			    }
+			    else {
+			    	throw new IOException("HTTP error code : "+ request.getResponseCode() + " [" + wsEndPoint + "]");
+			    }
 			}
 			else {
 				System.out.println("HTTP code .....: " + request.getResponseMessage());
-				System.err.println("Message from ws: " + HttpUtils.readResponse(request) + " [" + wsEndPoint + "]");
+				System.out.println("Message from ws: " + HttpUtils.readResponse(request) + " [" + wsEndPoint + "]");
 			}
 			
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			throw new MalformedURLException();
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new IOException();
 		}
 	}
 }
