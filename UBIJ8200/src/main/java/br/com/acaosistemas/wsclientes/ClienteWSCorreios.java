@@ -58,7 +58,7 @@ public class ClienteWSCorreios {
 		// UBI_POBOX_XML
 		ubpx = ubpxDAO.getUBIPoboxXML(pRowID);
 		
-		// Antes de invocar o web service o atributo Status precisa ser
+		// Antes de invocar o web service do correio, o atributo Status precisa ser
 		// ajustado para NAO_PROCESSADO;
 		ubpx.setStatus(StatusPoboxXMLEnum.NAO_PROCESSADO);
 		
