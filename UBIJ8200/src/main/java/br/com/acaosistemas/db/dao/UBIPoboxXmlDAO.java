@@ -110,7 +110,6 @@ public class UBIPoboxXmlDAO {
 	
 	public void updateStatus(UBIPoboxXml pUbpxRow) {
 		ubxl                   = new UBIPoboxXmlLog();
-		UBIPoboxXmlLogDAO ubxlDAO = new UBIPoboxXmlLogDAO();
 		
 		PreparedStatement stmt = null;
 		
@@ -130,11 +129,6 @@ public class UBIPoboxXmlDAO {
 			ubxl.setNumErro(0L);
 			ubxl.setMensagem(pUbpxRow.getStatus().getDescricao());
 			ubxl.setStatus(pUbpxRow.getStatus());
-			
-			// Insert na tabela de log ubi_pobox_mlx_log
-			ubxlDAO.insert(ubxl);
-			ubxlDAO.closeConnection();
-			
 			
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
