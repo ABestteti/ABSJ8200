@@ -177,14 +177,18 @@ public class ClienteWSCorreios {
 			    System.out.println("HTTP error code : "+ request.getResponseCode() + " [" + wsEndPoint + "]");
 			    
 			    if (request.getResponseCode() == HttpURLConnection.HTTP_INTERNAL_ERROR) {
-				    throw new MalformedURLException("HTTP error code : " + 
+				    throw new MalformedURLException("Código HTTP retornado: " + 
 			                                        request.getResponseCode() + 
-			                                        " [" + wsEndPoint + "]");
+			                                        " [" + wsEndPoint + "]\n" +
+			                                        "Parâmetros: "            + 
+			                                        parametros);
 			    }
 			    else {
-			    	throw new IOException("HTTP error code : " + 
+			    	throw new IOException("Código HTTP retornado: "     + 
 			                              request.getResponseCode() + 
-			                              " [" + wsEndPoint + "]");
+			                              " [" + wsEndPoint + "]\n" +
+			                              "Parâmetros: "            +
+			                              parametros);
 			    }
 			}
 			else {
