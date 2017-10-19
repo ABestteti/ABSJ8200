@@ -173,13 +173,16 @@ public class ClienteWSCorreios {
 			
 			if (request.getResponseCode() != HttpURLConnection.HTTP_OK) {
 			    System.out.println("HTTP error code : "+ request.getResponseCode() + " [" + wsEndPoint + "]");
-				//System.out.println("Message from ws: " + HttpUtils.readResponse(request) + " [" + wsEndPoint + "]");
 			    
 			    if (request.getResponseCode() == HttpURLConnection.HTTP_INTERNAL_ERROR) {
-				    throw new MalformedURLException("HTTP error code : "+ request.getResponseCode() + " [" + wsEndPoint + "]");
+				    throw new MalformedURLException("HTTP error code : " + 
+			                                        request.getResponseCode() + 
+			                                        " [" + wsEndPoint + "]");
 			    }
 			    else {
-			    	throw new IOException("HTTP error code : "+ request.getResponseCode() + " [" + wsEndPoint + "]");
+			    	throw new IOException("HTTP error code : " + 
+			                              request.getResponseCode() + 
+			                              " [" + wsEndPoint + "]");
 			    }
 			}
 			else {
@@ -188,9 +191,9 @@ public class ClienteWSCorreios {
 			}
 			
 		} catch (MalformedURLException e) {
-			throw new MalformedURLException();
+			throw new MalformedURLException(e.getMessage());
 		} catch (IOException e) {
-			throw new IOException();
+			throw new IOException(e.getMessage());
 		}
 	}
 }

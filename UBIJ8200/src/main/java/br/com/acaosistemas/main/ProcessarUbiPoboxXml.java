@@ -53,7 +53,7 @@ public class ProcessarUbiPoboxXml {
 				ubxl.setUbpxDtMov(ubpxRow.getId());
 				ubxl.setDtMov(new Timestamp(System.currentTimeMillis()));
 				ubxl.setStatus(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_RECUPERAVEL);
-				ubxl.setMensagem(e.getMessage());
+				ubxl.setMensagem(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_RECUPERAVEL.getDescricao()+"\n"+e.getMessage());
 				ubxl.setNumErro(new Long(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_RECUPERAVEL.getId()));
 				
 				ubxlDAO.insert(ubxl);
@@ -74,7 +74,7 @@ public class ProcessarUbiPoboxXml {
 				ubxl.setUbpxDtMov(ubpxRow.getId());
 				ubxl.setDtMov(new Timestamp(System.currentTimeMillis()));
 				ubxl.setStatus(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_IRRECUPERAVEL);
-				ubxl.setMensagem(e.getMessage());
+				ubxl.setMensagem(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_IRRECUPERAVEL.getDescricao()+"\n"+e.getMessage());
 				ubxl.setNumErro(new Long(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_IRRECUPERAVEL.getId()));
 				
 				ubxlDAO.insert(ubxl);
