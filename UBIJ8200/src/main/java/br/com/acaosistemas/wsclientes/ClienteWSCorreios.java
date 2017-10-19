@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 
 import br.com.acaosistemas.db.dao.UBIPoboxXmlDAO;
@@ -198,6 +199,8 @@ public class ClienteWSCorreios {
 			
 		} catch (MalformedURLException e) {
 			throw new MalformedURLException(e.getMessage());
+		} catch (SocketTimeoutException e) {
+			throw new SocketTimeoutException(e.getMessage());
 		} catch (IOException e) {
 			throw new IOException(e.getMessage());
 		}
