@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import br.com.acaosistemas.db.connection.ConnectionFactory;
 import br.com.acaosistemas.db.model.UBIPoboxXmlLog;
+import br.com.acaosistemas.main.Versao;
 
 public class UBIPoboxXmlLogDAO {
 
@@ -34,7 +35,7 @@ public class UBIPoboxXmlLogDAO {
 			stmt.setTimestamp(1, pUbxl.getUbpxDtMov());
 			stmt.setTimestamp(2, pUbxl.getDtMov());
 			stmt.setLong(3, pUbxl.getNumErro());
-			stmt.setString(4, pUbxl.getMensagem());
+			stmt.setString(4, Versao.getStringVersao() + "\n" + pUbxl.getMensagem());
 			stmt.setInt(5, pUbxl.getStatus().getId());
 			
 			stmt.execute();
