@@ -119,14 +119,16 @@ public class ClienteWSCorreios {
 	public void execWebService(UBIPoboxXml pUbpxRow) throws MalformedURLException, IOException {
 		String parametros = new String();
 		String wsEndPoint;
-				
-		UBIRuntimesDAO runtimeDAO = new UBIRuntimesDAO();
 		
-		// Recupera do banco de dados a informacao do runtime UBIWSINSPOBOXXML
-		wsEndPoint = runtimeDAO.getRuntimeValue("UBIWSINSPOBOXXML");
+		if (pUbpxRow.getWsEndpoint() == null) {
+			// Caso nao exista o endereco de endpoint definido, deve ser gerado uma excecao 
+			// para invalidar o envolope lido do banco de dados.
+			throw new IOException("Não foi definido no envelope o endereço de endpoint remoto.");
+		}
 		
-		// Fecha a conexao com o banco de daos
-		runtimeDAO.closeConnection();
+		// Recupera o endereco de endpoint do web service da ubi_pobox_xml
+		// remota que esta grava na ubi_pobox_xml local.
+		wsEndPoint = pUbpxRow.getWsEndpoint();
 		
 		// Antes de invocar o web service o atributo Status precisa ser
 		// ajustado para NAO_PROCESSADO;
