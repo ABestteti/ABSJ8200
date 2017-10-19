@@ -22,10 +22,6 @@ public class Deamon {
 
 	private Connection conn;
 	private CallableStatement stmt;
-	
-	public Deamon() {
-		// TODO Auto-generated constructor stub
-	}
 
 	public static void main(String[] args) {
 
@@ -76,12 +72,12 @@ public class Deamon {
 		// na tabela UBI_POBOX_XML
 		while (!stopDeamon) {
 			
-			// Pausa a execucao da thread principal por 0.5 segundos
+			// Pausa a execucao da thread principal por 5 segundos
 			// Com iso, e liberado o lock da dbms_pipe, permitindo que a 
 			// consiliacao de usuario possa conceder grant da package para
 			// o usuario que esta sem conciliado.
             try {
-				Thread.sleep(500);
+				Thread.sleep(5000);
 			} catch (InterruptedException e1) {
 				throw new RuntimeException(e1);
 			}
