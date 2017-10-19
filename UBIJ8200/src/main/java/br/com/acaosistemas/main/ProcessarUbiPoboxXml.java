@@ -2,6 +2,7 @@ package br.com.acaosistemas.main;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +61,12 @@ public class ProcessarUbiPoboxXml {
 //				ubxlDAO.insert(ubxl);
 //				ubxlDAO.closeConnection();
 				
+			} catch (SocketTimeoutException e) {
+				// Caso a chamada do web service do correio retornar a excecao
+				// IOException, faz a atualizacao do status com o
+		        // valor apropriado
+				ubpxRow.setStatus(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_IRRECUPERAVEL);
+				registraLog(ubpxRow, e);
 			} catch (IOException e) {
 				// Caso a chamada do web service do correio retornar a excecao
 				// IOException, faz a atualizacao do status com o
