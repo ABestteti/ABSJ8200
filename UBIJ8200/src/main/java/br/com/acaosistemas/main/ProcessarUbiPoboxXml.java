@@ -29,7 +29,7 @@ public class ProcessarUbiPoboxXml {
 			
 			// Atualiza o status da tabela UBI_POBOX_XML para
 			// PROCESSAMENTO_COM_SUCESSO (198)
-			ubpxDAO.updateStatus(StatusPoboxXMLEnum.PROCESSAMENTO_COM_SUCESSO, ubpxRow.getRowId());
+			ubpxDAO.updateStatus(ubpxRow);
 		}
 		
 		ubpxDAO.closeConnection();
