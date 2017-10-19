@@ -123,7 +123,6 @@ public class UBIPoboxXmlDAO {
 			
 			stmt.execute();
 			stmt.close();
-			conn.commit();
 			
 			// Prepara insert na tabela de log ubi_pobox_mlx_log
 			ubxl.setUbpxDtMov(pUbpxRow.getId());

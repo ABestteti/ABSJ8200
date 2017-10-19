@@ -40,8 +40,7 @@ public class UBIPoboxXmlLogDAO {
 			
 			stmt.execute();
 			stmt.close();
-			
-			conn.commit();
+
 			
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
