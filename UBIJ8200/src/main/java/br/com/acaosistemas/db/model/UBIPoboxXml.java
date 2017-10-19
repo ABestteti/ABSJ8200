@@ -5,6 +5,11 @@ import java.sql.Timestamp;
 import br.com.acaosistemas.db.enumeration.StatusPoboxXMLEnum;
 import br.com.acaosistemas.db.enumeration.TipoRecursoPoboxXMLEnum;
 
+/**
+ * Entidade representando tabela UBI_POBOX_XML
+ *
+ * @author Anderson Bestteti Santos
+ */
 public class UBIPoboxXml {
 	
     private Timestamp id;

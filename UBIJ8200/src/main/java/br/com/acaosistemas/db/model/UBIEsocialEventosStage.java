@@ -4,6 +4,11 @@ import java.sql.Timestamp;
 
 import br.com.acaosistemas.db.enumeration.SimNaoEnum;
 
+/**
+ * Entidade representando tabela UBI_ESOCIAL_EVENTOS_STAGE
+ *
+ * @author Anderson Bestteti Santos
+ */
 public class UBIEsocialEventosStage {
 	
     private Timestamp dtMov;

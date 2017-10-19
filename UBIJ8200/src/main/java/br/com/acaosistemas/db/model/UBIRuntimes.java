@@ -1,5 +1,10 @@
 package br.com.acaosistemas.db.model;
 
+/**
+ * Entidade representando tabela UBI_RUNTIMES
+ *
+ * @author Anderson Bestteti Santos
+ */
 public class UBIRuntimes {
 	
     private String id;

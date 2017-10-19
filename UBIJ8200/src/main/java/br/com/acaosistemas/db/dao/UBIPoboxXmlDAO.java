@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,11 +12,13 @@ import br.com.acaosistemas.db.connection.ConnectionFactory;
 import br.com.acaosistemas.db.enumeration.StatusPoboxXMLEnum;
 import br.com.acaosistemas.db.enumeration.TipoRecursoPoboxXMLEnum;
 import br.com.acaosistemas.db.model.UBIPoboxXml;
+import br.com.acaosistemas.db.model.UBIPoboxXmlLog;
 
 public class UBIPoboxXmlDAO {
 
 	private Connection conn;
 	private UBIPoboxXml ubpx;
+	private UBIPoboxXmlLog ubxl;
 	
 	public UBIPoboxXmlDAO() {
 		conn = new ConnectionFactory().getConnection();
@@ -105,19 +108,33 @@ public class UBIPoboxXmlDAO {
 		return listaUbiPoboxXml;
 	}
 	
-	public void updateStatus(StatusPoboxXMLEnum pUbpxStatus, String pRowId) {
-		ubpx                   = new UBIPoboxXml();
+	public void updateStatus(UBIPoboxXml pUbpxRow) {
+		ubxl                   = new UBIPoboxXmlLog();
+		UBIPoboxXmlLogDAO ubxlDAO = new UBIPoboxXmlLogDAO();
+		
 		PreparedStatement stmt = null;
 		
 		try {
 			stmt = conn.prepareStatement(
 					"UPDATE ubi_pobox_xml ubpx SET ubpx.status = ? WHERE ubpx.rowid = ?");
 		
-			stmt.setInt(1, pUbpxStatus.getId());
-			stmt.setString(2, pRowId);
+			stmt.setInt(1, pUbpxRow.getStatus().getId());
+			stmt.setString(2, pUbpxRow.getRowId());
 			
 			stmt.execute();
 			stmt.close();
+			conn.commit();
+			
+			// Prepara insert na tabela de log ubi_pobox_mlx_log
+			ubxl.setUbpxDtMov(pUbpxRow.getId());
+			ubxl.setDtMov(new Timestamp(System.currentTimeMillis()));
+			ubxl.setNumErro(0L);
+			ubxl.setMensagem(pUbpxRow.getStatus().getDescricao());
+			ubxl.setStatus(pUbpxRow.getStatus());
+			
+			// Insert na tabela de log ubi_pobox_mlx_log
+			ubxlDAO.insert(ubxl);
+			ubxlDAO.closeConnection();
 			
 			
 		} catch (SQLException e) {

@@ -1,5 +1,10 @@
 package br.com.acaosistemas.db.model;
 
+/**
+ * Entidade representando tabela UBI_LOTES_ESOCIAL
+ *
+ * @author Anderson Bestteti Santos
+ */
 public class UBILotesEsocial {
 
 	private Long ubiLoteNumero;
