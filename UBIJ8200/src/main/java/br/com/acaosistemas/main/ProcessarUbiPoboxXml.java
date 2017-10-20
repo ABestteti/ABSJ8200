@@ -14,6 +14,7 @@ import br.com.acaosistemas.db.dao.UBIPoboxXmlLogDAO;
 import br.com.acaosistemas.db.enumeration.StatusPoboxXMLEnum;
 import br.com.acaosistemas.db.model.UBIPoboxXml;
 import br.com.acaosistemas.db.model.UBIPoboxXmlLog;
+import br.com.acaosistemas.frw.util.ExceptionUtils;
 import br.com.acaosistemas.wsclientes.ClienteWSCorreios;
 
 public class ProcessarUbiPoboxXml {
@@ -46,19 +47,19 @@ public class ProcessarUbiPoboxXml {
 				// MalformedURLException, faz a atualizacao do status com o
 		        // valor apropriado.
 				ubpxRow.setStatus(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_IRRECUPERAVEL);
-				registraLog(ubpxRow, e);
+				gravaExcecaoLog(ubpxRow, e);
 			} catch (SocketTimeoutException e) {
 				// Caso a chamada do web service do correio retornar a excecao
 				// IOException, faz a atualizacao do status com o
 		        // valor apropriado
 				ubpxRow.setStatus(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_IRRECUPERAVEL);
-				registraLog(ubpxRow, e);
+				gravaExcecaoLog(ubpxRow, e);
 			} catch (IOException e) {
 				// Caso a chamada do web service do correio retornar a excecao
 				// IOException, faz a atualizacao do status com o
 		        // valor apropriado
 				ubpxRow.setStatus(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_IRRECUPERAVEL);
-				registraLog(ubpxRow, e);
+				gravaExcecaoLog(ubpxRow, e);
 			}
 		}
 		
@@ -66,11 +67,8 @@ public class ProcessarUbiPoboxXml {
 		System.out.println("   Finalizado processomento da UBI_POBOX_XML.");
 	}
 	
-	private void registraLog(UBIPoboxXml pUbpxRow, Exception pException) {
+	private void gravaExcecaoLog(UBIPoboxXml pUbpxRow, Exception pException) {
 		UBIPoboxXmlDAO ubpxDAO = new UBIPoboxXmlDAO();
-		StringWriter sw = new StringWriter();
-		
-		pException.printStackTrace(new PrintWriter(sw));
 		
 		ubpxDAO.updateStatus(pUbpxRow);
 		
@@ -86,7 +84,7 @@ public class ProcessarUbiPoboxXml {
 				        "\n"                                 +
 				        pException.getMessage()              +
 				        "\n"                                 +
-				        sw.toString());
+				        ExceptionUtils.stringStackTrace(pException));
 		ubxl.setNumErro(new Long(pUbpxRow.getStatus().getId()));
 		
 		ubxlDAO.insert(ubxl);

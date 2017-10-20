@@ -14,6 +14,7 @@ import br.com.acaosistemas.db.dao.UBIPoboxXmlDAO;
 import br.com.acaosistemas.db.dao.UBIRuntimesDAO;
 import br.com.acaosistemas.db.enumeration.StatusPoboxXMLEnum;
 import br.com.acaosistemas.db.model.UBIPoboxXml;
+import br.com.acaosistemas.frw.util.ExceptionUtils;
 import br.com.acaosistemas.frw.util.HttpUtils;
 
 /**
@@ -165,13 +166,8 @@ public class ClienteWSCorreios {
 			// Define o metodo da requisicao
 			request.setRequestMethod("POST");
 			
-			try {
-				// Conecta na URL
-				request.connect();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			// Conecta na URL
+			request.connect();
 			
 			// Escreve o objeto XML usando o OutputStream da requisicao
 			// para enviar para o web service.
@@ -203,11 +199,11 @@ public class ClienteWSCorreios {
 			}
 			
 		} catch (MalformedURLException e) {
-			throw new MalformedURLException(e.getMessage());
+			throw new MalformedURLException(e.getMessage()+":\n"+ExceptionUtils.stringStackTrace(e));
 		} catch (SocketTimeoutException e) {
-			throw new SocketTimeoutException(e.getMessage());
+			throw new SocketTimeoutException(e.getMessage()+":\n"+ExceptionUtils.stringStackTrace(e));
 		} catch (IOException e) {
-			throw new IOException(e.getMessage());
+			throw new IOException(e.getMessage()+":\n"+ExceptionUtils.stringStackTrace(e));
 		}
 	}
 }
