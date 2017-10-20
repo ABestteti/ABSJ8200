@@ -165,8 +165,13 @@ public class ClienteWSCorreios {
 			// Define o metodo da requisicao
 			request.setRequestMethod("POST");
 			
-			// Conecta na URL
-			request.connect();
+			try {
+				// Conecta na URL
+				request.connect();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			// Escreve o objeto XML usando o OutputStream da requisicao
 			// para enviar para o web service.
