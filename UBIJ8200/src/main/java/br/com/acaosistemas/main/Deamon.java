@@ -25,6 +25,14 @@ public class Deamon {
 
 	public static void main(String[] args) {
 
+		if (args.length != 3) {
+			System.out.println(Versao.ver()+"\n");
+			System.out.println("Quantidade de parametros insuficientes.");
+			System.out.println("Utilize o comando abaixo para executar a aplicacao, utilizando o Java 1.8 ou superior:");
+			System.out.println("java -jar UBIJ8200.jar usuarioDB senhaDB servidorDB:portaListner:instanciaDB");
+			System.exit(1);
+		}
+		
 		Deamon procPoboxXml = new Deamon();
 		
 		String dbUserName = args[0];
