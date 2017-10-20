@@ -1,6 +1,8 @@
 package br.com.acaosistemas.main;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.sql.Timestamp;
@@ -45,22 +47,6 @@ public class ProcessarUbiPoboxXml {
 		        // valor apropriado.
 				ubpxRow.setStatus(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_IRRECUPERAVEL);
 				registraLog(ubpxRow, e);
-//				ubpxDAO.updateStatus(ubpxRow);
-//				
-//				// Grava na tabela UBI_POBOX_XML_LOG a string com a mensagem de
-//				// erro completa				
-//				UBIPoboxXmlLogDAO ubxlDAO = new UBIPoboxXmlLogDAO();
-//				UBIPoboxXmlLog    ubxl    = new UBIPoboxXmlLog();
-//				
-//				ubxl.setUbpxDtMov(ubpxRow.getId());
-//				ubxl.setDtMov(new Timestamp(System.currentTimeMillis()));
-//				ubxl.setStatus(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_IRRECUPERAVEL);
-//				ubxl.setMensagem(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_IRRECUPERAVEL.getDescricao()+"\n"+e.getMessage());
-//				ubxl.setNumErro(new Long(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_IRRECUPERAVEL.getId()));
-//				
-//				ubxlDAO.insert(ubxl);
-//				ubxlDAO.closeConnection();
-				
 			} catch (SocketTimeoutException e) {
 				// Caso a chamada do web service do correio retornar a excecao
 				// IOException, faz a atualizacao do status com o
@@ -73,21 +59,6 @@ public class ProcessarUbiPoboxXml {
 		        // valor apropriado
 				ubpxRow.setStatus(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_IRRECUPERAVEL);
 				registraLog(ubpxRow, e);
-//				ubpxDAO.updateStatus(ubpxRow);
-//				
-//				// Grava na tabela UBI_POBOX_XML_LOG a string com a mensagem de
-//				// erro completa				
-//				UBIPoboxXmlLogDAO ubxlDAO = new UBIPoboxXmlLogDAO();
-//				UBIPoboxXmlLog    ubxl    = new UBIPoboxXmlLog();
-//				
-//				ubxl.setUbpxDtMov(ubpxRow.getId());
-//				ubxl.setDtMov(new Timestamp(System.currentTimeMillis()));
-//				ubxl.setStatus(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_IRRECUPERAVEL);
-//				ubxl.setMensagem(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_IRRECUPERAVEL.getDescricao()+"\n"+e.getMessage());
-//				ubxl.setNumErro(new Long(StatusPoboxXMLEnum.ERRO_PROCESSAMENTO_IRRECUPERAVEL.getId()));
-//				
-//				ubxlDAO.insert(ubxl);
-//				ubxlDAO.closeConnection();
 			}
 		}
 		
@@ -97,6 +68,9 @@ public class ProcessarUbiPoboxXml {
 	
 	private void registraLog(UBIPoboxXml pUbpxRow, Exception pException) {
 		UBIPoboxXmlDAO ubpxDAO = new UBIPoboxXmlDAO();
+		StringWriter sw = new StringWriter();
+		
+		pException.printStackTrace(new PrintWriter(sw));
 		
 		ubpxDAO.updateStatus(pUbpxRow);
 		
@@ -108,7 +82,11 @@ public class ProcessarUbiPoboxXml {
 		ubxl.setUbpxDtMov(pUbpxRow.getId());
 		ubxl.setDtMov(new Timestamp(System.currentTimeMillis()));
 		ubxl.setStatus(pUbpxRow.getStatus());
-		ubxl.setMensagem(pUbpxRow.getStatus().getDescricao()+"\n"+pException.getMessage());
+		ubxl.setMensagem(pUbpxRow.getStatus().getDescricao() +
+				        "\n"                                 +
+				        pException.getMessage()              +
+				        "\n"                                 +
+				        sw.toString());
 		ubxl.setNumErro(new Long(pUbpxRow.getStatus().getId()));
 		
 		ubxlDAO.insert(ubxl);
