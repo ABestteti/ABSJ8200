@@ -168,10 +168,10 @@ public class ClienteWSCorreios {
 			// Conecta na URL
 			request.connect();
 			
-			// Escreve o objeto XML usando o OutputStream da requisicao:
+			// Escreve o objeto XML usando o OutputStream da requisicao
 			// para enviar para o web service.
             try (OutputStream outputStream = request.getOutputStream()) {
-            	outputStream.write(pUbpxRow.getXml().getBytes("UTF-8"));
+            	    outputStream.write(pUbpxRow.getXml().getBytes("UTF-8"));
             }
 			
 			if (request.getResponseCode() != HttpURLConnection.HTTP_OK) {
