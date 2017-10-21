@@ -13,12 +13,12 @@ import br.com.acaosistemas.wsclientes.ClienteWSCorreios;
 import br.com.acaosistemas.wsclientes.ClienteWSEnviarLote;
 import oracle.jdbc.OracleTypes;
 
-public class Deamon {
+public class Daemon {
 
-	private static final int STOP_DAEMON            = 4;
-	private static final int CONSULTAR_STATUS       = 5;
+	private static final int STOP_DAEMON      = 4;
+	private static final int CONSULTAR_STATUS = 5;
 	
-	private static final int DEAMON_ALIVE           = 1;
+	private static final int DEAMON_ALIVE     = 1;
 
 	private Connection conn;
 	private CallableStatement stmt;
@@ -33,7 +33,7 @@ public class Deamon {
 			System.exit(1);
 		}
 		
-		Deamon procPoboxXml = new Deamon();
+		Daemon procPoboxXml = new Daemon();
 		
 		String dbUserName = args[0];
 		String dbPassWord = args[1];
@@ -172,6 +172,7 @@ public class Deamon {
 		}
 		
 		System.out.println("Servico encerrado por requisicao do usuario.");
+		System.exit(0);
 	}
 	
 	private void statusDaemon(String pPipeReturn) {

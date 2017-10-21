@@ -13,6 +13,8 @@ apply plugin: 'java-library'
 apply plugin: 'java-library-distribution'
 
 version = '1.0'
+def versionAcao = "2.0.00.19.10.2017"
+def appName = "UBIJ8200 - Servico cliente do web service do correio"
 
 tasks.withType(JavaCompile) {
   options.encoding = "ISO-8859-1"
@@ -21,8 +23,8 @@ tasks.withType(JavaCompile) {
 //create a single Jar with all dependencies
 task fatJar(type: Jar) {
 	manifest {
-        attributes 'Implementation-Title': 'UBIJ8200 - Cliente dos web services do UBI',
-        	 'Implementation-Version': version,
+        attributes 'Implementation-Title': appName,
+        	 'Implementation-Version': versionAcao,
         	 'Main-Class': 'br.com.acaosistemas.main.Deamon'
     }
     baseName = rootProject.name + '-all'
@@ -62,10 +64,10 @@ jar {
     exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.MF'
 
     manifest {
-        attributes 'Implementation-Title': 'UBIJ8200 - Cliente dos web services do UBI',
-        	           'Implementation-Version': version,
-        	           'Main-Class': 'br.com.acaosistemas.main.Daemon',
-                   'Class-Path': configurations.runtime.files.collect { "lib/$it.name" }.join(' ')
+        attributes 'Implementation-Title': appName,
+        	           'Implementation-Version': versionAcao,
+                   'Main-Class': 'br.com.acaosistemas.main.Daemon',
+        	           'Class-Path': configurations.runtime.files.collect { "lib/$it.name" }.join(' ')
     }
     // How-to add class path:
     //     https://stackoverflow.com/questions/22659463/add-classpath-in-manifest-using-gradle
