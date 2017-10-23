@@ -26,6 +26,7 @@ public class ProcessarUbiPoboxXml {
 		ClienteWSCorreios clientWS         = new ClienteWSCorreios();
 		UBIPoboxXmlDAO    ubpxDAO          = new UBIPoboxXmlDAO();
 		List<UBIPoboxXml> listaUbiPoboxXml = new ArrayList<UBIPoboxXml>();
+		UBIPoboxXmlLog    ubxl             = new UBIPoboxXmlLog();
 		
 		listaUbiPoboxXml = ubpxDAO.listPoboxXml();
 				
@@ -42,6 +43,21 @@ public class ProcessarUbiPoboxXml {
 				// PROCESSAMENTO_COM_SUCESSO (198)
 				ubpxRow.setStatus(StatusPoboxXMLEnum.PROCESSAMENTO_COM_SUCESSO);
 				ubpxDAO.updateStatus(ubpxRow);
+				
+				// Insere no log o resultado da chamada do web service
+				ubxl.setUbpxDtMov(ubpxRow.getId());
+				ubxl.setDtMov(new Timestamp(System.currentTimeMillis()));
+				ubxl.setMensagem(Versao.getStringVersao() +
+						         "\n"                     +
+						         StatusPoboxXMLEnum.PROCESSAMENTO_COM_SUCESSO);
+				ubxl.setStatus(StatusPoboxXMLEnum.PROCESSAMENTO_COM_SUCESSO);
+				ubxl.setNumErro(0L);
+				
+				UBIPoboxXmlLogDAO ubxlDAO = new UBIPoboxXmlLogDAO();
+				ubxlDAO.insert(ubxl);
+				ubxlDAO.closeConnection();
+				
+				
 			} catch (MalformedURLException e) {
 				// Caso a chamada do web service do correio retornar a excecao
 				// MalformedURLException, faz a atualizacao do status com o
