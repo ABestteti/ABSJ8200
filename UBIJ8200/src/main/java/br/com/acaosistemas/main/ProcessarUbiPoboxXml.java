@@ -49,7 +49,7 @@ public class ProcessarUbiPoboxXml {
 				ubxl.setDtMov(new Timestamp(System.currentTimeMillis()));
 				ubxl.setMensagem(Versao.getStringVersao() +
 						         "\n"                     +
-						         StatusPoboxXMLEnum.PROCESSAMENTO_COM_SUCESSO);
+						         StatusPoboxXMLEnum.PROCESSAMENTO_COM_SUCESSO.getDescricao());
 				ubxl.setStatus(StatusPoboxXMLEnum.PROCESSAMENTO_COM_SUCESSO);
 				ubxl.setNumErro(0L);
 				
