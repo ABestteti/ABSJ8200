@@ -7,12 +7,18 @@ import java.sql.SQLException;
 import br.com.acaosistemas.db.connection.ConnectionFactory;
 import br.com.acaosistemas.db.connection.DBConnectionInfo;
 import br.com.acaosistemas.db.dao.UBIRuntimesDAO;
-import br.com.acaosistemas.wsclientes.ClienteWSAssinarEvento;
-import br.com.acaosistemas.wsclientes.ClienteWSConsultarLote;
-import br.com.acaosistemas.wsclientes.ClienteWSCorreios;
-import br.com.acaosistemas.wsclientes.ClienteWSEnviarLote;
 import oracle.jdbc.OracleTypes;
 
+/**
+ * 
+ * @author Anderson Bestteti
+ * Classe reponsavel por ler o pipe de comunicacao do banco
+ * 
+ * Referencias:
+ *  https://stackoverflow.com/questions/19333011/how-to-call-a-stored-function-from-jdbc
+ *  http://docs.oracle.com/cd/A84870_01/doc/java.816/a81354/samapp2.htm
+ *  https://docs.oracle.com/cd/B19306_01/java.102/b14355/toc.htm
+ */
 public class Daemon {
 
 	private static final int STOP_DAEMON      = 4;
