@@ -11,7 +11,7 @@ public final class Versao {
 	private static String copyright = "Direitos Autorais (c) 2017-2017\n";
 	private static String descricao = "Servico de consumo do web service do correio.\n";
 	private static String programa  = "UBIJ8200";
-	private static String versao    = "2.0.00.23.10.2017";
+	private static String versao    = "2.0.00.25.10.2017";
 	
 	
 	public static String getStringVersao() {
