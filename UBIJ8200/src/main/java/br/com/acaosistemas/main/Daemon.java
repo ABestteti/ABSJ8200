@@ -158,8 +158,7 @@ public class Daemon {
 					// pipe de retorno que sera usado para enviar a versao
 					// deste servico de volta para o PL/SQL.
 					versaoDaemon(pipeConteudo);
-			     	break;
-					
+			     	break;		
 				case STOP_DAEMON:
 					System.out.println("Recebido comando stop do servico!");
 					stopDeamon = true;
@@ -203,7 +202,7 @@ public class Daemon {
 			
 			// Manda para o pipe o status que representa que o
 			// o deamon esta rodando.
-			stmt.setString(1, Versao.getStringVersao());
+			stmt.setInt(1, DEAMON_ALIVE);
 			stmt.registerOutParameter(2, OracleTypes.NUMBER);			
 			stmt.setString(3, pPipeReturn);
 			
@@ -229,7 +228,7 @@ public class Daemon {
 			
 			// Manda para o pipe o status que representa que o
 			// o deamon esta rodando.
-			stmt.setInt(1, DEAMON_ALIVE);
+			stmt.setString(1, Versao.getStringVersao());
 			stmt.registerOutParameter(2, OracleTypes.NUMBER);			
 			stmt.setString(3, pPipeReturn);
 			
