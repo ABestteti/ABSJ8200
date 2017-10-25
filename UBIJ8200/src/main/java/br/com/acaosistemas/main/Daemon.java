@@ -21,8 +21,8 @@ import oracle.jdbc.OracleTypes;
  */
 public class Daemon {
 
-	private static final int STOP_DAEMON      = 4;
-	private static final int CONSULTAR_STATUS = 5;
+	private static final int STOP_DAEMON      = 1;
+	private static final int CONSULTAR_STATUS = 2;
 	
 	private static final int DEAMON_ALIVE     = 1;
 
