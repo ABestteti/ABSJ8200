@@ -12,7 +12,7 @@ apply plugin: "java"
 apply plugin: 'java-library'
 apply plugin: 'java-library-distribution'
 
-version = '1.0'
+//version = '1.0'
 def versionAcao = "2.0.00.25.10.2017"
 def appName = "UBIJ8200 - Servico cliente do web service do correio"
 
