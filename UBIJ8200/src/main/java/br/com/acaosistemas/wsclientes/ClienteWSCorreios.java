@@ -49,10 +49,7 @@ public class ClienteWSCorreios {
 		// Objects de acesso as tabelas do banco de dados
 		UBIPoboxXmlDAO ubpxDAO    = new UBIPoboxXmlDAO();
 		UBIRuntimesDAO runtimeDAO = new UBIRuntimesDAO();
-		
-		// Recupera do banco de dados a informacao do runtime UBIWSINSPOBOXXML
-		wsEndPoint = runtimeDAO.getRuntimeValue("UBIWSINSPOBOXXML");
-		
+				
 		// Fecha a conexao com o banco de daos
 		runtimeDAO.closeConnection();
 		
@@ -63,6 +60,10 @@ public class ClienteWSCorreios {
 		// Antes de invocar o web service do correio, o atributo Status precisa ser
 		// ajustado para NAO_PROCESSADO;
 		ubpx.setStatus(StatusPoboxXMLEnum.NAO_PROCESSADO);
+
+		// Recupera o endereco de endpoint do web service da ubi_pobox_xml
+		// remota que esta grava na ubi_pobox_xml local.
+		wsEndPoint = ubpx.getWsEndpoint();
 		
 		parametros  = "nomeTapi=" + ubpx.getNomeTapi() + "&";
 		parametros += "sistemaDestinatario=" + ubpx.getSistemaDestinatario() + "&";
