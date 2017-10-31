@@ -62,7 +62,7 @@ public class ClienteWSCorreios {
 		ubpx.setStatus(StatusPoboxXMLEnum.NAO_PROCESSADO);
 
 		// Recupera o endereco de endpoint do web service da ubi_pobox_xml
-		// remota que esta grava na ubi_pobox_xml local.
+		// remota que esta gravado na ubi_pobox_xml local.
 		wsEndPoint = ubpx.getWsEndpoint();
 		
 		parametros  = "nomeTapi=" + ubpx.getNomeTapi() + "&";
