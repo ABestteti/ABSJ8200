@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import br.com.acaosistemas.db.dao.UBIPoboxXmlDAO;
@@ -34,7 +36,7 @@ public class ProcessarUbiPoboxXml {
 			
 			System.out.println(new Timestamp(System.currentTimeMillis()).toString());
 			System.out.println("     Processando rowId: "+ubpxRow.getRowId());
-			System.out.println("     Data de movimentacao: "+ubpxRow.getId());
+			System.out.println("     Data de movimentacao: "+ubpxRow.getDtMov());
 				
 			try {
 				clientWS.execWebService(ubpxRow);
@@ -45,8 +47,8 @@ public class ProcessarUbiPoboxXml {
 				ubpxDAO.updateStatus(ubpxRow);
 				
 				// Insere no log o resultado da chamada do web service
-				ubxl.setUbpxDtMov(ubpxRow.getId());		
-				ubxl.setDtMov(new Timestamp(System.currentTimeMillis()));
+				ubxl.setUbpxSeqReg(ubpxRow.getSeqReg());		
+				ubxl.setDtMov(new Timestamp(System.currentTimeMillis())); 
 				ubxl.setMensagem(Versao.getStringVersao() +
 						         "\n"                     +
 						         StatusPoboxXMLEnum.PROCESSAMENTO_COM_SUCESSO.getDescricao());
@@ -89,16 +91,14 @@ public class ProcessarUbiPoboxXml {
 		ubpxDAO.updateStatus(pUbpxRow);
 		
 		// Grava na tabela UBI_POBOX_XML_LOG a string com a mensagem de
-		// erro completa				
+		// erro completa.				
 		UBIPoboxXmlLogDAO ubxlDAO = new UBIPoboxXmlLogDAO();
 		UBIPoboxXmlLog    ubxl    = new UBIPoboxXmlLog();
 		
-		ubxl.setUbpxDtMov(pUbpxRow.getId());
+		ubxl.setUbpxSeqReg(pUbpxRow.getSeqReg());
 		ubxl.setDtMov(new Timestamp(System.currentTimeMillis()));
 		ubxl.setStatus(pUbpxRow.getStatus());
 		ubxl.setMensagem(pUbpxRow.getStatus().getDescricao() +
-				        "\n"                                 +
-				        pException.getMessage()              +
 				        "\n"                                 +
 				        ExceptionUtils.stringStackTrace(pException));
 		ubxl.setNumErro(new Long(pUbpxRow.getStatus().getId()));

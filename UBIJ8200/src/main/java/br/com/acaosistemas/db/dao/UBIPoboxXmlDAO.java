@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,14 +11,11 @@ import br.com.acaosistemas.db.connection.ConnectionFactory;
 import br.com.acaosistemas.db.enumeration.StatusPoboxXMLEnum;
 import br.com.acaosistemas.db.enumeration.TipoRecursoPoboxXMLEnum;
 import br.com.acaosistemas.db.model.UBIPoboxXml;
-import br.com.acaosistemas.db.model.UBIPoboxXmlLog;
 
 public class UBIPoboxXmlDAO {
 
 	private Connection conn;
 	private UBIPoboxXml ubpx;
-	private UBIPoboxXmlLog ubxl;
-	
 	public UBIPoboxXmlDAO() {
 		conn = new ConnectionFactory().getConnection();
 	}
@@ -28,8 +24,7 @@ public class UBIPoboxXmlDAO {
 		try {
 			conn.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
 	}
 	
@@ -39,7 +34,7 @@ public class UBIPoboxXmlDAO {
 		
 		try {
 			stmt = conn.prepareStatement(
-					"SELECT ubpx.rowid, ubpx.dt_mov, ubpx.status, ubpx.tipo_recurso, ubpx.ws_endpoint, ubpx.table_name, ubpx.nome_tapi, ubpx.sistema_remetente, ubpx.sistema_destinatario, ubpx.xml FROM ubi_pobox_xml ubpx WHERE ubpx.rowid = ?");
+					"SELECT ubpx.rowid, ubpx.seq_reg, ubpx.dt_mov, ubpx.status, ubpx.tipo_recurso, ubpx.ws_endpoint, ubpx.table_name, ubpx.nome_tapi, ubpx.sistema_remetente, ubpx.sistema_destinatario, ubpx.xml FROM ubi_pobox_xml ubpx WHERE ubpx.rowid = ?");
 		
 			stmt.setString(1, pRowID);
 			
@@ -47,7 +42,8 @@ public class UBIPoboxXmlDAO {
 			
 			while (rs.next()) {
 				ubpx.setRowId(rs.getString("rowid"));
-				ubpx.setId(rs.getTimestamp("dt_mov"));
+				ubpx.setSeqReg(rs.getLong("seq_reg"));
+				ubpx.setDtMov(rs.getDate("dt_mov"));
 				ubpx.setStatus(StatusPoboxXMLEnum.getById(rs.getInt("status")));
 				ubpx.setTipoRecurso(TipoRecursoPoboxXMLEnum.getById(rs.getString("tipo_recurso")));
 				ubpx.setWsEndpoint(rs.getString("ws_endpoint"));
@@ -59,7 +55,7 @@ public class UBIPoboxXmlDAO {
 			}
 			
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
 		
 		return ubpx;
@@ -78,7 +74,7 @@ public class UBIPoboxXmlDAO {
 		List<UBIPoboxXml> listaUbiPoboxXml = new ArrayList<UBIPoboxXml>();		
 		try {
 			stmt = conn.prepareStatement(
-					"SELECT ubpx.rowid, ubpx.dt_mov, ubpx.status, ubpx.tipo_recurso, ubpx.ws_endpoint, ubpx.table_name, ubpx.nome_tapi, ubpx.sistema_remetente, ubpx.sistema_destinatario, ubpx.xml FROM ubi_pobox_xml ubpx WHERE ubpx.status = ?");
+					"SELECT ubpx.rowid, ubpx.seq_reg, ubpx.dt_mov, ubpx.status, ubpx.tipo_recurso, ubpx.ws_endpoint, ubpx.table_name, ubpx.nome_tapi, ubpx.sistema_remetente, ubpx.sistema_destinatario, ubpx.xml FROM ubi_pobox_xml ubpx WHERE ubpx.status = ?");
 			
 			stmt.setInt(1, StatusPoboxXMLEnum.A_TRANSMITIR.getId());
 			
@@ -88,7 +84,8 @@ public class UBIPoboxXmlDAO {
 				UBIPoboxXml ubpx = new UBIPoboxXml();
 				
 				ubpx.setRowId(rs.getString("rowId"));
-				ubpx.setId(rs.getTimestamp("dt_mov"));
+				ubpx.setSeqReg(rs.getLong("seq_reg"));
+				ubpx.setDtMov(rs.getDate("dt_mov"));
 				ubpx.setStatus(StatusPoboxXMLEnum.getById(rs.getInt("status")));
 				ubpx.setTipoRecurso(TipoRecursoPoboxXMLEnum.getById(rs.getString("tipo_recurso")));
 				ubpx.setWsEndpoint(rs.getString("ws_endpoint"));
@@ -102,15 +99,13 @@ public class UBIPoboxXmlDAO {
 			}
 
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
 		
 		return listaUbiPoboxXml;
 	}
 	
 	public void updateStatus(UBIPoboxXml pUbpxRow) {
-		ubxl                   = new UBIPoboxXmlLog();
-		
 		PreparedStatement stmt = null;
 		
 		try {
@@ -121,17 +116,9 @@ public class UBIPoboxXmlDAO {
 			stmt.setString(2, pUbpxRow.getRowId());
 			
 			stmt.execute();
-			stmt.close();
-			
-			// Prepara insert na tabela de log ubi_pobox_mlx_log
-			ubxl.setUbpxDtMov(pUbpxRow.getId());
-			ubxl.setDtMov(new Timestamp(System.currentTimeMillis()));
-			ubxl.setNumErro(0L);
-			ubxl.setMensagem(pUbpxRow.getStatus().getDescricao());
-			ubxl.setStatus(pUbpxRow.getStatus());
-			
+			stmt.close();			
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}		
-	}
+	}	
 }

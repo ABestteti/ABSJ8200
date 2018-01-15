@@ -85,8 +85,7 @@ public class Daemon {
 		// Remove todas as mensagens do pipe indicado em "pipeName"
 		ResetPipe.reset(conn, pipeName);
 
-		System.out.println(Versao.ver());
-		
+		System.out.println(Versao.ver());		
 		System.out.println("Processando registros dos correios...");
 		
 		// Loop para leitura constante do pipe de comunicacao

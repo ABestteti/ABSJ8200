@@ -11,24 +11,13 @@ import br.com.acaosistemas.db.enumeration.StatusPoboxXMLEnum;
  */
 public class UBIPoboxXmlLog {
 
-    private Timestamp ubpxDtMov;
+	private Long ubpxSeqReg;
+    private Long seqReg;
     private Timestamp dtMov;
     private String mensagem;
     private Long numErro;
     private StatusPoboxXMLEnum status;
     
-	public Timestamp getUbpxDtMov() {
-		return ubpxDtMov;
-	}
-	public void setUbpxDtMov(Timestamp ubpxDtMov) {
-		this.ubpxDtMov = ubpxDtMov;
-	}
-	public Timestamp getDtMov() {
-		return dtMov;
-	}
-	public void setDtMov(Timestamp dtMov) {
-		this.dtMov = dtMov;
-	}
 	public String getMensagem() {
 		return mensagem;
 	}
@@ -46,6 +35,24 @@ public class UBIPoboxXmlLog {
 	}
 	public void setStatus(StatusPoboxXMLEnum status) {
 		this.status = status;
+	}
+	public Long getUbpxSeqReg() {
+		return ubpxSeqReg;
+	}
+	public void setUbpxSeqReg(Long ubpxSeqReg) {
+		this.ubpxSeqReg = ubpxSeqReg;
+	}
+	public Long getSeqReg() {
+		return seqReg;
+	}
+	public void setSeqReg(Long seqReg) {
+		this.seqReg = seqReg;
+	}
+	public Timestamp getDtMov() {
+		return dtMov;
+	}
+	public void setDtMov(Timestamp dtMov) {
+		this.dtMov = dtMov;
 	}
     
 }

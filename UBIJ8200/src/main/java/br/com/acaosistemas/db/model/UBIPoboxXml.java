@@ -1,6 +1,6 @@
 package br.com.acaosistemas.db.model;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 
 import br.com.acaosistemas.db.enumeration.StatusPoboxXMLEnum;
 import br.com.acaosistemas.db.enumeration.TipoRecursoPoboxXMLEnum;
@@ -12,7 +12,8 @@ import br.com.acaosistemas.db.enumeration.TipoRecursoPoboxXMLEnum;
  */
 public class UBIPoboxXml {
 	
-    private Timestamp id;
+    private Long seqReg;
+    private Date dtMov;
     private String nomeTapi;
     private String sistemaDestinatario;
     private String sistemaRemetente;
@@ -23,11 +24,11 @@ public class UBIPoboxXml {
     private String xml;
     private String rowId;
     
-	public Timestamp getId() {
-		return id;
+	public Date getDtMov() {
+		return dtMov;
 	}
-	public void setId(Timestamp id) {
-		this.id = id;
+	public void setDtMov(Date dtMov) {
+		this.dtMov = dtMov;
 	}
 	public String getNomeTapi() {
 		return nomeTapi;
@@ -82,5 +83,11 @@ public class UBIPoboxXml {
 	}
 	public void setRowId(String rowId) {
 		this.rowId = rowId;
+	}
+	public Long getSeqReg() {
+		return seqReg;
+	}
+	public void setSeqReg(Long seqReg) {
+		this.seqReg = seqReg;
 	}               
 }

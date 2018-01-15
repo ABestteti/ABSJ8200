@@ -13,7 +13,7 @@ apply plugin: 'java-library'
 apply plugin: 'java-library-distribution'
 
 //version = '1.0'
-def versionAcao = "3.0.00.31.10.2017"
+def versionAcao = "3.0.00.15.01.2018"
 def appName = "UBIJ8200 - Servico cliente do web service do correio"
 
 tasks.withType(JavaCompile) {
@@ -65,9 +65,9 @@ jar {
 
     manifest {
         attributes 'Implementation-Title': appName,
-        	           'Implementation-Version': versionAcao,
-                   'Main-Class': 'br.com.acaosistemas.main.Daemon',
-        	           'Class-Path': configurations.runtime.files.collect { "lib/$it.name" }.join(' ')
+        'Implementation-Version': versionAcao,
+        'Main-Class': 'br.com.acaosistemas.main.Daemon',
+        'Class-Path': configurations.runtime.files.collect { "lib/$it.name" }.join(' ')
     }
     // How-to add class path:
     //     https://stackoverflow.com/questions/22659463/add-classpath-in-manifest-using-gradle

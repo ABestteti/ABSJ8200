@@ -2,8 +2,8 @@ package br.com.acaosistemas.db.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
 import br.com.acaosistemas.db.connection.ConnectionFactory;
 import br.com.acaosistemas.db.model.UBIPoboxXmlLog;
@@ -26,63 +26,54 @@ public class UBIPoboxXmlLogDAO {
 	}
 	
 	public void insert(UBIPoboxXmlLog pUbxl) {
-		
-		final String ORA_DUP_VAL_ON_INDEX_ERROR = "ORA-00001"; // CHAVE DUPLICADA
-        final int    RETRIES                    = 3;		
-		PreparedStatement stmt					= null;
+		PreparedStatement stmt = null;
 
-		// Laço para tratar erro ORA_DUP_VAL_ON_INDEX_ERROR. Se não ocorrer o erro na primeira iteração,
-		// então o laço será interrompido. Caso, contrário serão feitas mais duas tentativas de inserção
-		// com a atualização de pUbxl com novo Timestamp.		
-		for (int tentativa = 1; tentativa <= RETRIES; tentativa++) {
-			
+		try {
+			stmt = conn.prepareStatement(
+					"INSERT INTO ubi_pobox_xml_log (ubpx_seq_reg,seq_reg,dt_mov,num_erro,mensagem,status) VALUES (?,?,?,?,?,?)");
+
+			stmt.setLong(1, pUbxl.getUbpxSeqReg());
+			stmt.setLong(2, getNextSeqReg());
+			stmt.setTimestamp(3, pUbxl.getDtMov());
+			stmt.setLong(4, pUbxl.getNumErro());
+			stmt.setString(5, Versao.getStringVersao() + "\n" + pUbxl.getMensagem());
+			stmt.setInt(6, pUbxl.getStatus().getId());
+
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
 			try {
-				stmt = conn.prepareStatement(
-						"INSERT INTO ubi_pobox_xml_log (ubpx_dt_mov,dt_mov,num_erro,mensagem,status) VALUES (?,?,?,?,?)");
-			
-				stmt.setTimestamp(1, pUbxl.getUbpxDtMov());			
-				stmt.setTimestamp(2, pUbxl.getDtMov());
-				stmt.setLong(3, pUbxl.getNumErro());
-				stmt.setString(4, Versao.getStringVersao() + "\n" + pUbxl.getMensagem());
-				stmt.setInt(5, pUbxl.getStatus().getId());
-				
-				stmt.execute();
 				stmt.close();
-				break; // cai fora do laço caso a inserção ocorra sem problema.
-				
 			} catch (SQLException e) {
-				if (e.getMessage().contains(ORA_DUP_VAL_ON_INDEX_ERROR)) {
-
-					if (tentativa < RETRIES) {
-						try {
-							// Aguarda 250 milisegundos para atualizar o TimeStamp de
-							// pUbxl.setDtMov.
-							Thread.sleep(250);
-						} catch (InterruptedException e1) {
-							e1.printStackTrace();
-						}
-
-						// Atualiza pUbxl.setDtMov com o novo TimeStamp para tentar nova
-						// inserção na tabela UBI_POBOX_XML_LOG.
-						pUbxl.setDtMov(new Timestamp(System.currentTimeMillis()));
-
-					} else {
-						System.out.println(
-								RETRIES +
-								" tentativas de inclusão do log sem êxito.");
-						e.printStackTrace();
-					}
-				} else {
-					e.printStackTrace();
-				}				
+				e.printStackTrace();
 			}
-			finally {
-				try {
-					stmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}		
 		}
 	}
+	
+	/***
+	 * 
+	 * @return
+	 * Retorna o proximo valor da sequencia de banco UBI_SEQ
+	 */
+	private Long getNextSeqReg() {
+		Long nextVal = 0L;
+		PreparedStatement stmt = null;
+
+		try {
+			stmt = conn.prepareStatement("SELECT ubi_seq.nextval FROM dual");
+
+			ResultSet rs = stmt.executeQuery();
+			
+			rs.next();
+			nextVal = rs.getLong(1);
+
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}	
+		return nextVal;
+	}	
 }
