@@ -3,10 +3,12 @@ package br.com.acaosistemas.main;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import br.com.acaosistemas.db.connection.ConnectionFactory;
 import br.com.acaosistemas.db.connection.DBConnectionInfo;
 import br.com.acaosistemas.db.dao.UBIRuntimesDAO;
+import br.com.acaosistemas.frw.util.ResetPipe;
 import oracle.jdbc.OracleTypes;
 
 /**
@@ -79,6 +81,11 @@ public class Daemon {
 		// Abre conexao com o banco para leitura do pipe do
 		// banco de dados.
 		conn = new ConnectionFactory().getConnection();
+
+		// Remove todas as mensagens do pipe indicado em "pipeName"
+		ResetPipe.reset(conn, pipeName);
+
+		System.out.println(Versao.ver());
 		
 		System.out.println("Processando registros dos correios...");
 		
@@ -143,6 +150,7 @@ public class Daemon {
 
 				switch (pipeCmd) {
 				case CONSULTAR_STATUS:
+					System.out.println(new Timestamp(System.currentTimeMillis()).toString());
 					System.out.println("Recebido comando status do servico!");
 					
 					// Nesse caso o objeto pipeConteudo armazena o nome do
@@ -152,6 +160,7 @@ public class Daemon {
 					statusDaemon(pipeConteudo);
 			     	break;
 				case CONSULTAR_VERSAO_DAEMON:
+					System.out.println(new Timestamp(System.currentTimeMillis()).toString());
 					System.out.println("Recebido comando versao do servico!");
 					
 					// Nesse caso o objeto pipeConteudo armazena o nome do
@@ -160,6 +169,7 @@ public class Daemon {
 					versaoDaemon(pipeConteudo);
 			     	break;		
 				case STOP_DAEMON:
+					System.out.println(new Timestamp(System.currentTimeMillis()).toString());
 					System.out.println("Recebido comando stop do servico!");
 					stopDaemon = true;
 					break;
