@@ -32,7 +32,9 @@ public class ProcessarUbiPoboxXml {
 		
 		for (UBIPoboxXml ubpxRow : listaUbiPoboxXml) {
 			
+			System.out.println(new Timestamp(System.currentTimeMillis()).toString());
 			System.out.println("     Processando rowId: "+ubpxRow.getRowId());
+			System.out.println("     Data de movimentacao: "+ubpxRow.getId());
 				
 			try {
 				clientWS.execWebService(ubpxRow);
@@ -43,7 +45,7 @@ public class ProcessarUbiPoboxXml {
 				ubpxDAO.updateStatus(ubpxRow);
 				
 				// Insere no log o resultado da chamada do web service
-				ubxl.setUbpxDtMov(ubpxRow.getId());
+				ubxl.setUbpxDtMov(ubpxRow.getId());		
 				ubxl.setDtMov(new Timestamp(System.currentTimeMillis()));
 				ubxl.setMensagem(Versao.getStringVersao() +
 						         "\n"                     +
