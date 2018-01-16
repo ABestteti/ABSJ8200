@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import br.com.acaosistemas.db.dao.UBIPoboxXmlDAO;
