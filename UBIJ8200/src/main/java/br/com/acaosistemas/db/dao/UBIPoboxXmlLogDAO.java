@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import br.com.acaosistemas.db.connection.ConnectionFactory;
 import br.com.acaosistemas.db.model.UBIPoboxXmlLog;
@@ -58,8 +61,10 @@ public class UBIPoboxXmlLogDAO {
 	 * Retorna o proximo valor da sequencia de banco UBI_SEQ
 	 */
 	private Long getNextSeqReg() {
-		Long nextVal = 0L;
-		PreparedStatement stmt = null;
+		String             dateTimeSeq = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+		DecimalFormat nextValFormatter = new DecimalFormat("00000");
+		Long                   nextVal = 0L;
+		PreparedStatement         stmt = null;
 
 		try {
 			stmt = conn.prepareStatement("SELECT ubi_seq.nextval FROM dual");
@@ -67,12 +72,12 @@ public class UBIPoboxXmlLogDAO {
 			ResultSet rs = stmt.executeQuery();
 			
 			rs.next();
-			nextVal = rs.getLong(1);
-
+			nextVal = Long.parseLong(dateTimeSeq.concat(nextValFormatter.format(rs.getLong(1))));
+						
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}	
 		return nextVal;
 	}	
