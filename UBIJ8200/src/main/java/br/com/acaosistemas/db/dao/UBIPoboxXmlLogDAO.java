@@ -1,5 +1,6 @@
 package br.com.acaosistemas.db.dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import br.com.acaosistemas.db.connection.ConnectionFactory;
 import br.com.acaosistemas.db.model.UBIPoboxXmlLog;
 import br.com.acaosistemas.main.Versao;
+import oracle.jdbc.OracleTypes;
 
 public class UBIPoboxXmlLogDAO {
 
@@ -64,10 +66,13 @@ public class UBIPoboxXmlLogDAO {
 		String             dateTimeSeq = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 		DecimalFormat nextValFormatter = new DecimalFormat("00000");
 		Long                   nextVal = 0L;
-		PreparedStatement         stmt = null;
+		CallableStatement         stmt = null;
 
 		try {
-			stmt = conn.prepareStatement("SELECT ubi_seq.nextval FROM dual");
+			stmt = conn.prepareCall("{? = call ubip8100.gera_seq_chave}");
+			
+			// Define que o tipo de retorno da funcao sera um NUMBER
+			stmt.registerOutParameter(1, OracleTypes.NUMBER);
 
 			ResultSet rs = stmt.executeQuery();
 			
