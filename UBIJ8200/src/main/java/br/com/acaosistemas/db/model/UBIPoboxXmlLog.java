@@ -1,6 +1,6 @@
 package br.com.acaosistemas.db.model;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 
 import br.com.acaosistemas.db.enumeration.StatusPoboxXMLEnum;
 
@@ -13,7 +13,7 @@ public class UBIPoboxXmlLog {
 
 	private Long ubpxSeqReg;
     private Long seqReg;
-    private Timestamp dtMov;
+    private Date dtMov;
     private String mensagem;
     private Long numErro;
     private StatusPoboxXMLEnum status;
@@ -48,10 +48,10 @@ public class UBIPoboxXmlLog {
 	public void setSeqReg(Long seqReg) {
 		this.seqReg = seqReg;
 	}
-	public Timestamp getDtMov() {
+	public Date getDtMov() {
 		return dtMov;
 	}
-	public void setDtMov(Timestamp dtMov) {
+	public void setDtMov(Date dtMov) {
 		this.dtMov = dtMov;
 	}
     

@@ -3,11 +3,7 @@ package br.com.acaosistemas.db.dao;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import br.com.acaosistemas.db.connection.ConnectionFactory;
 import br.com.acaosistemas.db.model.UBIPoboxXmlLog;
@@ -39,7 +35,7 @@ public class UBIPoboxXmlLogDAO {
 
 			stmt.setLong(1, pUbxl.getUbpxSeqReg());
 			stmt.setLong(2, getNextSeqReg());
-			stmt.setTimestamp(3, pUbxl.getDtMov());
+			stmt.setDate(3, new java.sql.Date(new java.util.Date().getTime()));
 			stmt.setLong(4, pUbxl.getNumErro());
 			stmt.setString(5, Versao.getStringVersao() + "\n" + pUbxl.getMensagem());
 			stmt.setInt(6, pUbxl.getStatus().getId());
@@ -58,28 +54,24 @@ public class UBIPoboxXmlLogDAO {
 	}
 	
 	/***
+	 * Retorna a sequencia gerada pelo package de banco ubip8100.gera_seq_chave.
+	 * @return Um numero que representa a sequencia gerada pela funcao de banco.
 	 * 
-	 * @return
-	 * Retorna o proximo valor da sequencia de banco UBI_SEQ
 	 */
 	private Long getNextSeqReg() {
-		String             dateTimeSeq = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-		DecimalFormat nextValFormatter = new DecimalFormat("00000");
-		Long                   nextVal = 0L;
-		CallableStatement         stmt = null;
+		Long              nextVal = 0L;
+		CallableStatement    stmt = null;
 
 		try {
+			// Executa a funcao gera_seq_chave do package ubip8100. 
 			stmt = conn.prepareCall("{? = call ubip8100.gera_seq_chave}");
 			
 			// Define que o tipo de retorno da funcao sera um NUMBER
 			stmt.registerOutParameter(1, OracleTypes.NUMBER);
-
-			ResultSet rs = stmt.executeQuery();
-			
-			rs.next();
-			nextVal = Long.parseLong(dateTimeSeq.concat(nextValFormatter.format(rs.getLong(1))));
-						
 			stmt.execute();
+			
+			nextVal = stmt.getLong(1);
+						
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

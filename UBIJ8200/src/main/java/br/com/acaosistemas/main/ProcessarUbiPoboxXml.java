@@ -25,11 +25,12 @@ public class ProcessarUbiPoboxXml {
 		UBIPoboxXmlDAO    ubpxDAO          = new UBIPoboxXmlDAO();
 		List<UBIPoboxXml> listaUbiPoboxXml = new ArrayList<UBIPoboxXml>();
 		UBIPoboxXmlLog    ubxl             = new UBIPoboxXmlLog();
-		
-		listaUbiPoboxXml = ubpxDAO.listPoboxXml();
-				
+						
 		System.out.println("   Processando registros da UBI_POBOX_XML...");
 		
+		// Obtem a lista de registros da tabeke UBI_POBOX_XML a serem
+		// processados.
+		listaUbiPoboxXml = ubpxDAO.listPoboxXml();
 		for (UBIPoboxXml ubpxRow : listaUbiPoboxXml) {
 			
 			System.out.println(new Timestamp(System.currentTimeMillis()).toString());
@@ -44,9 +45,8 @@ public class ProcessarUbiPoboxXml {
 				ubpxRow.setStatus(StatusPoboxXMLEnum.PROCESSAMENTO_COM_SUCESSO);
 				ubpxDAO.updateStatus(ubpxRow);
 				
-				// Insere no log o resultado da chamada do web service
-				ubxl.setUbpxSeqReg(ubpxRow.getSeqReg());		
-				ubxl.setDtMov(new Timestamp(System.currentTimeMillis())); 
+				// Prepara o insert no log com resultado da chamada do web service
+				ubxl.setUbpxSeqReg(ubpxRow.getSeqReg());
 				ubxl.setMensagem(Versao.getStringVersao() +
 						         "\n"                     +
 						         StatusPoboxXMLEnum.PROCESSAMENTO_COM_SUCESSO.getDescricao());
@@ -56,8 +56,6 @@ public class ProcessarUbiPoboxXml {
 				UBIPoboxXmlLogDAO ubxlDAO = new UBIPoboxXmlLogDAO();
 				ubxlDAO.insert(ubxl);
 				ubxlDAO.closeConnection();
-				
-				
 			} catch (MalformedURLException e) {
 				// Caso a chamada do web service do correio retornar a excecao
 				// MalformedURLException, faz a atualizacao do status com o
@@ -94,7 +92,6 @@ public class ProcessarUbiPoboxXml {
 		UBIPoboxXmlLog    ubxl    = new UBIPoboxXmlLog();
 		
 		ubxl.setUbpxSeqReg(pUbpxRow.getSeqReg());
-		ubxl.setDtMov(new Timestamp(System.currentTimeMillis()));
 		ubxl.setStatus(pUbpxRow.getStatus());
 		ubxl.setMensagem(pUbpxRow.getStatus().getDescricao() +
 				        "\n"                                 +

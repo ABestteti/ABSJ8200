@@ -12,26 +12,31 @@ public enum StatusPoboxXMLEnum implements BaseEnum<Integer> {
 
     /**
      * Indica que o XML da P. O. Box nao foi processado.
+     * {@value 0}
      */
     NAO_PROCESSADO(0, "Não Processado"),
 	
 	/**
      * Indica que o XML da P. O. Box esta pronto para transmitir.
+     * {@value 101}
      */
     A_TRANSMITIR(101, "A transmitir"),
  
     /**
      * Indica que o XML da P. O. Box esta pronto para transmitir.
+     * {@value 196}
      */
     ERRO_PROCESSAMENTO_RECUPERAVEL(196, "Erro no processamento - recuperável"),
 
     /**
      * Indica que o XML da P. O. Box foi processado com sucesso.
+     * {@value 198}
      */
     PROCESSAMENTO_COM_SUCESSO(198, "Processamento com sucesso"),
     
     /**
      * Indica que houve um erro na integracao do XML da P. O. Box.
+     * {@value 199}
      */
     ERRO_PROCESSAMENTO_IRRECUPERAVEL(199, "Erro no processamento - irrecuperável");
 
