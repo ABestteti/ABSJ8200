@@ -88,8 +88,8 @@ public class Daemon {
 		System.out.println(Versao.ver());		
 		System.out.println("Processando registros dos correios...");
 		
-		// Loop para leitura constante do pipe de comunicacao
-		// do deamon e por procura de registros com status 0 (nao processado)
+		// Loop para leitura do pipe de comunicacao
+		// do daemon e por procura de registros com status 0 (nao processado)
 		// na tabela UBI_POBOX_XML
 		while (!stopDaemon) {
 			
@@ -234,7 +234,6 @@ public class Daemon {
 			
 			// Retorna o status do deamon, informando
 			// que ele esta ativo: DEAMON_ALIVE
-			//dbms_pipe.pack_message(pipe_name);
 			stmt = conn.prepareCall("BEGIN dbms_pipe.pack_message(?); ? := dbms_pipe.send_message(?,2); END;");
 			
 			// Manda para o pipe o status que representa que o

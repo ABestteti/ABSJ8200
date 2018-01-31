@@ -10,8 +10,6 @@ import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 
-import br.com.acaosistemas.db.dao.UBIPoboxXmlDAO;
-import br.com.acaosistemas.db.dao.UBIRuntimesDAO;
 import br.com.acaosistemas.db.enumeration.StatusPoboxXMLEnum;
 import br.com.acaosistemas.db.model.UBIPoboxXml;
 import br.com.acaosistemas.frw.util.ExceptionUtils;
@@ -35,88 +33,6 @@ public class ClienteWSCorreios {
 	 * Construtor default da classe
 	 */
 	public ClienteWSCorreios() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	public void execWebService(String pRowID) {
-		String parametros = new String();
-		String wsEndPoint;
-		
-		// Objeto de representacao de um registro da
-		// da tabela UBI_POBOX_XML
-		UBIPoboxXml ubpx;
-		
-		// Objects de acesso as tabelas do banco de dados
-		UBIPoboxXmlDAO ubpxDAO    = new UBIPoboxXmlDAO();
-		UBIRuntimesDAO runtimeDAO = new UBIRuntimesDAO();
-				
-		// Fecha a conexao com o banco de daos
-		runtimeDAO.closeConnection();
-		
-		// Recupera do banco de dados as informacoes da tabela
-		// UBI_POBOX_XML
-		ubpx = ubpxDAO.getUBIPoboxXML(pRowID);
-		
-		// Antes de invocar o web service do correio, o atributo Status precisa ser
-		// ajustado para NAO_PROCESSADO;
-		ubpx.setStatus(StatusPoboxXMLEnum.NAO_PROCESSADO);
-
-		// Recupera o endereco de endpoint do web service da ubi_pobox_xml
-		// remota que esta gravado na ubi_pobox_xml local.
-		wsEndPoint = ubpx.getWsEndpoint();
-		
-		parametros  = "nomeTapi=" + ubpx.getNomeTapi() + "&";
-		parametros += "sistemaDestinatario=" + ubpx.getSistemaDestinatario() + "&";
-		parametros += "sistemaRemetente=" + ubpx.getSistemaRemetente() + "&";
-		parametros += "wsEndpoint=" + ubpx.getWsEndpoint() + "&";
-		parametros += "tableName=" + ubpx.getTableName() + "&";
-		parametros += "status=" + ubpx.getStatus().getId() + "&";
-		parametros += "tipoRecurso=" + ubpx.getTipoRecurso().getId();
-		
-		try {
-			
-			URL url = new URL(wsEndPoint+parametros);
-			
-			HttpURLConnection request = (HttpURLConnection) url.openConnection();			
-
-			// Define que a conexao pode enviar informacoes e obte-las de volta:
-			request.setDoOutput(true);
-			request.setDoInput(true);
-			
-			// Define o content-type para trabalhar com o corpo da mensagem HTTP em
-			// formato octet-stream, pois o web service da POBOX espera receber esse
-			// formato para manter intacto o formato UTF-8 do XML.
-			request.setRequestProperty("Content-Type", "application/octet-stream");
-			
-			request.setRequestProperty("Content-Length", String.valueOf(ubpx.getXml().length()));
-			
-			request.setRequestProperty("Transfer-Encoding", "chunked");
-			
-			// Define o metodo da requisicao
-			request.setRequestMethod("POST");
-			
-			// Conecta na URL
-			request.connect();
-			
-			// Escreve o objeto XML usando o OutputStream da requisicao:
-			// para enviar para o web service.
-            try (OutputStream outputStream = request.getOutputStream()) {
-            	outputStream.write(ubpx.getXml().getBytes("UTF-8"));
-            }
-			
-			if (request.getResponseCode() != HttpURLConnection.HTTP_OK) {
-				throw new RuntimeException("HTTP error code : "+ request.getResponseCode() + " [" + wsEndPoint + "]");
-			}
-			else {
-				System.out.println("HTTP code .....: " + request.getResponseMessage());
-				System.err.println("Message from ws: " + HttpUtils.readResponse(request) + " [" + wsEndPoint + "]");
-			}
-			
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public void execWebService(UBIPoboxXml pUbpxRow) throws MalformedURLException, IOException {
@@ -126,7 +42,7 @@ public class ClienteWSCorreios {
 		if (pUbpxRow.getWsEndpoint() == null) {
 			// Caso nao exista o endereco de endpoint definido, deve ser gerado uma excecao 
 			// para invalidar o envolope lido do banco de dados.
-			throw new IOException("Não foi definido no envelope o endereço de endpoint remoto.");
+			throw new IOException("Nao foi definido no envelope o endereco do servico web (endpoint).");
 		}
 		
 		// Recupera o endereco de endpoint do web service da ubi_pobox_xml
@@ -137,18 +53,22 @@ public class ClienteWSCorreios {
 		// ajustado para NAO_PROCESSADO;
 		pUbpxRow.setStatus(StatusPoboxXMLEnum.NAO_PROCESSADO);
 		
+        // Monta os parametros para chamada do servico web da POBOX_XML
+		// remota.
 		parametros  = "nomeTapi=" + pUbpxRow.getNomeTapi() + "&";
 		parametros += "sistemaDestinatario=" + pUbpxRow.getSistemaDestinatario() + "&";
 		parametros += "sistemaRemetente=" + pUbpxRow.getSistemaRemetente() + "&";
 		parametros += "wsEndpoint=" + pUbpxRow.getWsEndpoint() + "&";
 		parametros += "tableName=" + pUbpxRow.getTableName() + "&";
 		parametros += "status=" + pUbpxRow.getStatus().getId() + "&";
-		parametros += "tipoRecurso=" + pUbpxRow.getTipoRecurso().getId();
+		parametros += "tipoRecurso=" + pUbpxRow.getTipoRecurso().getId() + "&";
+		parametros += "cnpj=" + pUbpxRow.getCnpj();
 		
-		try {
-			
+		try {			
+			// Cria a URL para posterior invocacao do servico web.
 			URL url = new URL(wsEndPoint+parametros);
 			
+			// Cria uma requisicao de conexao com o servidor remoto.
 			HttpURLConnection request = (HttpURLConnection) url.openConnection();			
 
 			// Define que a conexao pode enviar informacoes e obte-las de volta:
@@ -159,9 +79,7 @@ public class ClienteWSCorreios {
 			// formato octet-stream, pois o web service da POBOX espera receber esse
 			// formato para manter intacto o formato UTF-8 do XML.
 			request.setRequestProperty("Content-Type", "application/octet-stream");
-			
 			request.setRequestProperty("Content-Length", String.valueOf(pUbpxRow.getXml().length()));
-			
 			request.setRequestProperty("Transfer-Encoding", "chunked");
 			
 			// Define o metodo da requisicao
@@ -177,34 +95,36 @@ public class ClienteWSCorreios {
             }
 			
 			if (request.getResponseCode() != HttpURLConnection.HTTP_OK) {
-			    System.out.println("HTTP error code : "+ request.getResponseCode() + " [" + wsEndPoint + "]");
+			    System.out.println("     Codigo de erro HTTP..: "+ request.getResponseCode() + " [" + wsEndPoint + "]");
 			    
 			    if (request.getResponseCode() == HttpURLConnection.HTTP_INTERNAL_ERROR) {
-				    throw new MalformedURLException("Código HTTP retornado: " + 
+				    throw new MalformedURLException("Codigo HTTP retornado: " + 
 			                                        request.getResponseCode() + 
 			                                        " [" + wsEndPoint + "]\n" +
-			                                        "Parâmetros: "            + 
+			                                        "Parametros: "            + 
 			                                        parametros);
 			    }
 			    else {
-			    	throw new IOException("Código HTTP retornado: "     + 
+			    	throw new IOException("Codigo HTTP retornado: "     + 
 			                              request.getResponseCode() + 
 			                              " [" + wsEndPoint + "]\n" +
-			                              "Parâmetros: "            +
+			                              "Parametros: "            +
 			                              parametros);
 			    }
 			}
 			else {
-				System.out.println("HTTP code .....: " + request.getResponseMessage());
-				System.out.println("Message from ws: " + HttpUtils.readResponse(request) + " [" + wsEndPoint + "]");
-			}
-			
+				System.out.println("     Codigo HTTP..........: " + request.getResponseMessage());
+				System.out.println("     Mensagem do servico..: " + HttpUtils.readResponse(request) + " [" + wsEndPoint + "]");
+			}			
 		} catch (MalformedURLException e) {
-			throw new MalformedURLException(e.getMessage()+":\n"+ExceptionUtils.stringStackTrace(e));
+			System.out.println("     Codigo de erro.......: " + e.toString());
+			throw new MalformedURLException(e.getMessage()+":\n" + ExceptionUtils.stringStackTrace(e));
 		} catch (SocketTimeoutException e) {
-			throw new SocketTimeoutException(e.getMessage()+":\n"+ExceptionUtils.stringStackTrace(e));
+			System.out.println("     Codigo de erro.......: " + e.toString());
+			throw new SocketTimeoutException(e.getMessage()+":\n" + ExceptionUtils.stringStackTrace(e));
 		} catch (IOException e) {
-			throw new IOException(e.getMessage()+":\n"+ExceptionUtils.stringStackTrace(e));
+			System.out.println("     Codigo de erro.......: " + e.toString());
+			throw new IOException(e.getMessage()+":\n" + ExceptionUtils.stringStackTrace(e));
 		}
 	}
 }

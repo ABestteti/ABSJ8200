@@ -33,9 +33,9 @@ public class ProcessarUbiPoboxXml {
 		listaUbiPoboxXml = ubpxDAO.listPoboxXml();
 		for (UBIPoboxXml ubpxRow : listaUbiPoboxXml) {
 			
-			System.out.println(new Timestamp(System.currentTimeMillis()).toString());
-			System.out.println("     Processando rowId: "+ubpxRow.getRowId());
-			System.out.println("     Data de movimentacao: "+ubpxRow.getDtMov());
+			System.out.println("   ".concat(new Timestamp(System.currentTimeMillis()).toString()));
+			System.out.println("     Processando rowId....: " + ubpxRow.getRowId());
+			System.out.println("     Sequencia do registro: " + ubpxRow.getSeqReg());
 				
 			try {
 				clientWS.execWebService(ubpxRow);
@@ -47,8 +47,7 @@ public class ProcessarUbiPoboxXml {
 				
 				// Prepara o insert no log com resultado da chamada do web service
 				ubxl.setUbpxSeqReg(ubpxRow.getSeqReg());
-				ubxl.setMensagem(Versao.getStringVersao() +
-						         "\n"                     +
+				ubxl.setMensagem(StatusPoboxXMLEnum.PROCESSAMENTO_COM_SUCESSO.getId() + "-" +
 						         StatusPoboxXMLEnum.PROCESSAMENTO_COM_SUCESSO.getDescricao());
 				ubxl.setStatus(StatusPoboxXMLEnum.PROCESSAMENTO_COM_SUCESSO);
 				ubxl.setNumErro(0L);
@@ -93,9 +92,10 @@ public class ProcessarUbiPoboxXml {
 		
 		ubxl.setUbpxSeqReg(pUbpxRow.getSeqReg());
 		ubxl.setStatus(pUbpxRow.getStatus());
-		ubxl.setMensagem(pUbpxRow.getStatus().getDescricao() +
-				        "\n"                                 +
-				        ExceptionUtils.stringStackTrace(pException));
+		ubxl.setMensagem(pUbpxRow.getStatus().getId() + "-"   +
+				         pUbpxRow.getStatus().getDescricao()  +
+				         "\n"                                 +
+				         ExceptionUtils.stringStackTrace(pException));
 		ubxl.setNumErro(new Long(pUbpxRow.getStatus().getId()));
 		
 		ubxlDAO.insert(ubxl);

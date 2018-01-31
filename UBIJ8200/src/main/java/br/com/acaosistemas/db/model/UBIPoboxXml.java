@@ -22,6 +22,7 @@ public class UBIPoboxXml {
     private TipoRecursoPoboxXMLEnum tipoRecurso;
     private String wsEndpoint;
     private String xml;
+    private Long cnpj;
     private String rowId;
     
 	public Date getDtMov() {
@@ -89,5 +90,11 @@ public class UBIPoboxXml {
 	}
 	public void setSeqReg(Long seqReg) {
 		this.seqReg = seqReg;
+	}
+	public Long getCnpj() {
+		return cnpj;
+	}
+	public void setCnpj(Long cnpj) {
+		this.cnpj = cnpj;
 	}               
 }

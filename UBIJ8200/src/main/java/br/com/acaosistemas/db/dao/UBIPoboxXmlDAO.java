@@ -34,7 +34,7 @@ public class UBIPoboxXmlDAO {
 		
 		try {
 			stmt = conn.prepareStatement(
-					"SELECT ubpx.rowid, ubpx.seq_reg, ubpx.dt_mov, ubpx.status, ubpx.tipo_recurso, ubpx.ws_endpoint, ubpx.table_name, ubpx.nome_tapi, ubpx.sistema_remetente, ubpx.sistema_destinatario, ubpx.xml FROM ubi_pobox_xml ubpx WHERE ubpx.rowid = ?");
+					"SELECT ubpx.rowid, ubpx.seq_reg, ubpx.dt_mov, ubpx.status, ubpx.tipo_recurso, ubpx.ws_endpoint, ubpx.table_name, ubpx.nome_tapi, ubpx.sistema_remetente, ubpx.sistema_destinatario, ubpx.xml, ubpx.cnpj FROM ubi_pobox_xml ubpx WHERE ubpx.rowid = ?");
 		
 			stmt.setString(1, pRowID);
 			
@@ -52,6 +52,7 @@ public class UBIPoboxXmlDAO {
 				ubpx.setSistemaRemetente(rs.getString("sistema_remetente"));
 				ubpx.setSistemaDestinatario(rs.getString("sistema_destinatario"));
 				ubpx.setXml(rs.getString("xml"));
+				ubpx.setCnpj(rs.getLong("cnpj"));
 			}
 			
 		} catch (SQLException e) {
@@ -74,7 +75,7 @@ public class UBIPoboxXmlDAO {
 		List<UBIPoboxXml> listaUbiPoboxXml = new ArrayList<UBIPoboxXml>();		
 		try {
 			stmt = conn.prepareStatement(
-					"SELECT ubpx.rowid, ubpx.seq_reg, ubpx.dt_mov, ubpx.status, ubpx.tipo_recurso, ubpx.ws_endpoint, ubpx.table_name, ubpx.nome_tapi, ubpx.sistema_remetente, ubpx.sistema_destinatario, ubpx.xml FROM ubi_pobox_xml ubpx WHERE ubpx.status = ?");
+					"SELECT ubpx.rowid, ubpx.seq_reg, ubpx.dt_mov, ubpx.status, ubpx.tipo_recurso, ubpx.ws_endpoint, ubpx.table_name, ubpx.nome_tapi, ubpx.sistema_remetente, ubpx.sistema_destinatario, ubpx.xml, ubpx.cnpj FROM ubi_pobox_xml ubpx WHERE ubpx.status = ?");
 			
 			stmt.setInt(1, StatusPoboxXMLEnum.A_TRANSMITIR.getId());
 			
@@ -94,6 +95,7 @@ public class UBIPoboxXmlDAO {
 				ubpx.setSistemaRemetente(rs.getString("sistema_remetente"));
 				ubpx.setSistemaDestinatario(rs.getString("sistema_destinatario"));
 				ubpx.setXml(rs.getString("xml"));
+				ubpx.setCnpj(rs.getLong("cnpj"));
 				
 				listaUbiPoboxXml.add(ubpx);
 			}
