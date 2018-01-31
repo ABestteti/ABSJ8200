@@ -1,6 +1,5 @@
 package br.com.acaosistemas.frw.util;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
