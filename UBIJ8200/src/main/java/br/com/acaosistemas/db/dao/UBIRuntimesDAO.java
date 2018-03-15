@@ -1,6 +1,6 @@
 package br.com.acaosistemas.db.dao;
 
-import java.sql.Connection;
+import oracle.jdbc.OracleConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,19 +28,11 @@ public class UBIRuntimesDAO {
 
 	private static final Logger logger = LogManager.getLogger(UBIRuntimesDAO.class);
 	
-	private Connection conn;
+	private OracleConnection conn;
 	private UBIRuntimes runt;
 	
 	public UBIRuntimesDAO() {
 		conn = new ConnectionFactory().getConnection();
-	}
-	
-	public void closeConnection () {
-		try {
-			conn.close();
-		} catch (SQLException e) {
-			logger.error(e);
-		}
 	}
 	
 	public String getRuntimeValue(String pRuntimeID) {
@@ -64,9 +56,15 @@ public class UBIRuntimesDAO {
 			}
 			
 			rs.close();
-			stmt.close();
+			
 		} catch (SQLException e) {
 			logger.error(e);
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				logger.error(e);
+			}			
 		}
 		return runt.getValor();
 	}

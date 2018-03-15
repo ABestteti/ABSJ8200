@@ -1,5 +1,16 @@
 package br.com.acaosistemas.db.connection;
 
+/**
+ * Classe reponsavel armazenar as informacoes de conexao com o banco Oracle.
+ * <p>
+ * <b>Empresa:</b> Acao Sistemas de Informatica Ltda.
+ * <p>
+ * Alterações:
+ * <p>
+ * 2018.03.15 - ABS - Adicionado JavaDoc na classe.
+ * 
+ * @author Anderson Bestteti
+ */
 public final class DBConnectionInfo {
 
 	// Nome do usuario do banco de dados

@@ -1,9 +1,12 @@
 package br.com.acaosistemas.db.dao;
 
+import oracle.jdbc.OracleConnection;
 import java.sql.CallableStatement;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import br.com.acaosistemas.db.connection.ConnectionFactory;
 import br.com.acaosistemas.db.model.UBIPoboxXmlLog;
@@ -17,25 +20,20 @@ import oracle.jdbc.OracleTypes;
  * <p>
  * Alterações:
  * <p>
- * 2018.03.15 - ABS - Adicionado JavaDoc.
+ * 2018.03.15 - ABS - Adicionado sistema de log com a biblioteca log4j2.
+ *                  - Adicionado JavaDoc.
  * 
  * @author Anderson Bestteti Santos
  *
  */
 public class UBIPoboxXmlLogDAO {
 
-	private Connection conn;
+	private static final Logger logger = LogManager.getLogger(UBIPoboxXmlLogDAO.class);
+	
+	private OracleConnection conn;
 	
 	public UBIPoboxXmlLogDAO() {
 		conn = new ConnectionFactory().getConnection();
-	}
-	
-	public void closeConnection () {
-		try {
-			conn.close();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
 	}
 	
 	public void insert(UBIPoboxXmlLog pUbxl) {
@@ -67,14 +65,13 @@ public class UBIPoboxXmlLogDAO {
 			stmt.setInt(6, pUbxl.getStatus().getId());
 
 			stmt.execute();
-			stmt.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e);
 		} finally {
 			try {
 				stmt.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				logger.error(e);
 			}
 		}
 	}
@@ -100,7 +97,7 @@ public class UBIPoboxXmlLogDAO {
 						
 			stmt.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}	
 		return nextVal;
 	}	

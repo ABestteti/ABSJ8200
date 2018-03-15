@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import br.com.acaosistemas.db.connection.ConnectionFactory;
 import br.com.acaosistemas.db.enumeration.StatusPoboxXMLEnum;
 import br.com.acaosistemas.db.enumeration.TipoRecursoPoboxXMLEnum;
@@ -19,25 +22,20 @@ import br.com.acaosistemas.db.model.UBIPoboxXml;
  * <p>
  * Alterações:
  * <p>
- * 2018.03.15 - ABS - Adicionado JavaDoc.
+ * 2018.03.15 - ABS - Adicionado sistema de log com a biblioteca log4j2.
+ *                  - Adicionado JavaDoc.
  * 
  * @author Anderson Bestteti Santos
  *
  */
 public class UBIPoboxXmlDAO {
 
+	private static final Logger logger = LogManager.getLogger(UBIPoboxXmlDAO.class);
+	
 	private Connection conn;
 	private UBIPoboxXml ubpx;
 	public UBIPoboxXmlDAO() {
 		conn = new ConnectionFactory().getConnection();
-	}
-	
-	public void closeConnection () {
-		try {
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public UBIPoboxXml getUBIPoboxXML(String pRowID) {
@@ -84,7 +82,7 @@ public class UBIPoboxXmlDAO {
 			}
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		
 		return ubpx;
@@ -145,7 +143,7 @@ public class UBIPoboxXmlDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		
 		return listaUbiPoboxXml;
@@ -169,7 +167,7 @@ public class UBIPoboxXmlDAO {
 			stmt.execute();
 			stmt.close();			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}		
 	}	
 }
