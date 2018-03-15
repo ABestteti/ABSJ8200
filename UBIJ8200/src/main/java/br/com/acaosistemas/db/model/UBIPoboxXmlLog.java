@@ -6,8 +6,16 @@ import br.com.acaosistemas.db.enumeration.StatusPoboxXMLEnum;
 
 /**
  * Entidade representando tabela UBI_POBOX_XML_LOG
+ * <p>
+ * <b>Empresa:</b> Acao Sistemas de Informatica Ltda.
+ * <p>
+ * Alterações:
+ * <p>
+ * 2018.03.15 - ABS - Implementado metodo toString().
+ *                    
  *
  * @author Anderson Bestteti Santos
+ * 
  */
 public class UBIPoboxXmlLog {
 
@@ -53,6 +61,11 @@ public class UBIPoboxXmlLog {
 	}
 	public void setDtMov(Date dtMov) {
 		this.dtMov = dtMov;
+	}
+	@Override
+	public String toString() {
+		return "UBIPoboxXmlLog [ubpxSeqReg=" + ubpxSeqReg + ", seqReg=" + seqReg + ", dtMov=" + dtMov + ", mensagem="
+				+ mensagem + ", numErro=" + numErro + ", status=" + status + "]";
 	}
     
 }

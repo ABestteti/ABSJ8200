@@ -7,8 +7,16 @@ import br.com.acaosistemas.db.enumeration.TipoRecursoPoboxXMLEnum;
 
 /**
  * Entidade representando tabela UBI_POBOX_XML
+ * <p>
+ * <b>Empresa:</b> Acao Sistemas de Informatica Ltda.
+ * <p>
+ * Alterações:
+ * <p>
+ * 2018.03.15 - ABS - Implementado metodo toString().
+ *                    
  *
  * @author Anderson Bestteti Santos
+ * 
  */
 public class UBIPoboxXml {
 	
@@ -96,5 +104,12 @@ public class UBIPoboxXml {
 	}
 	public void setCnpj(Long cnpj) {
 		this.cnpj = cnpj;
+	}
+	@Override
+	public String toString() {
+		return "UBIPoboxXml [seqReg=" + seqReg + ", dtMov=" + dtMov + ", nomeTapi=" + nomeTapi
+				+ ", sistemaDestinatario=" + sistemaDestinatario + ", sistemaRemetente=" + sistemaRemetente
+				+ ", status=" + status + ", tableName=" + tableName + ", tipoRecurso=" + tipoRecurso + ", wsEndpoint="
+				+ wsEndpoint + ", cnpj=" + cnpj + ", rowId=" + rowId + "]";
 	}               
 }

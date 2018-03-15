@@ -12,6 +12,18 @@ import br.com.acaosistemas.db.enumeration.StatusPoboxXMLEnum;
 import br.com.acaosistemas.db.enumeration.TipoRecursoPoboxXMLEnum;
 import br.com.acaosistemas.db.model.UBIPoboxXml;
 
+/**
+ * DAO para manipulacao da tabela UBI_POBOX_XML
+ * <p>
+ * <b>Empresa:</b> Acao Sistemas de Informatica Ltda.
+ * <p>
+ * Alterações:
+ * <p>
+ * 2018.03.15 - ABS - Adicionado JavaDoc.
+ * 
+ * @author Anderson Bestteti Santos
+ *
+ */
 public class UBIPoboxXmlDAO {
 
 	private Connection conn;
@@ -34,7 +46,23 @@ public class UBIPoboxXmlDAO {
 		
 		try {
 			stmt = conn.prepareStatement(
-					"SELECT ubpx.rowid, ubpx.seq_reg, ubpx.dt_mov, ubpx.status, ubpx.tipo_recurso, ubpx.ws_endpoint, ubpx.table_name, ubpx.nome_tapi, ubpx.sistema_remetente, ubpx.sistema_destinatario, ubpx.xml, ubpx.cnpj FROM ubi_pobox_xml ubpx WHERE ubpx.rowid = ?");
+					  "SELECT "
+					+ "   ubpx.rowid,"
+					+ "   ubpx.seq_reg,"
+					+ "   ubpx.dt_mov,"
+					+ "   ubpx.status,"
+					+ "   ubpx.tipo_recurso,"
+					+ "   ubpx.ws_endpoint,"
+					+ "   ubpx.table_name,"
+					+ "   ubpx.nome_tapi,"
+					+ "   ubpx.sistema_remetente,"
+					+ "   ubpx.sistema_destinatario,"
+					+ "   ubpx.xml,"
+					+ "   ubpx.cnpj "
+					+ "FROM"
+					+ "   ubi_pobox_xml ubpx "
+					+ "WHERE"
+					+ "   ubpx.rowid = ?");
 		
 			stmt.setString(1, pRowID);
 			
@@ -75,7 +103,23 @@ public class UBIPoboxXmlDAO {
 		List<UBIPoboxXml> listaUbiPoboxXml = new ArrayList<UBIPoboxXml>();		
 		try {
 			stmt = conn.prepareStatement(
-					"SELECT ubpx.rowid, ubpx.seq_reg, ubpx.dt_mov, ubpx.status, ubpx.tipo_recurso, ubpx.ws_endpoint, ubpx.table_name, ubpx.nome_tapi, ubpx.sistema_remetente, ubpx.sistema_destinatario, ubpx.xml, ubpx.cnpj FROM ubi_pobox_xml ubpx WHERE ubpx.status = ?");
+					  "SELECT"
+					+ "   ubpx.rowid,"
+					+ "   ubpx.seq_reg,"
+					+ "   ubpx.dt_mov,"
+					+ "   ubpx.status,"
+					+ "   ubpx.tipo_recurso,"
+					+ "   ubpx.ws_endpoint,"
+					+ "   ubpx.table_name,"
+					+ "   ubpx.nome_tapi,"
+					+ "   ubpx.sistema_remetente,"
+					+ "   ubpx.sistema_destinatario,"
+					+ "   ubpx.xml,"
+					+ "   ubpx.cnpj "
+					+ "FROM"
+					+ "   ubi_pobox_xml ubpx "
+					+ "WHERE"
+					+ "   ubpx.status = ?");
 			
 			stmt.setInt(1, StatusPoboxXMLEnum.A_TRANSMITIR.getId());
 			
@@ -112,7 +156,12 @@ public class UBIPoboxXmlDAO {
 		
 		try {
 			stmt = conn.prepareStatement(
-					"UPDATE ubi_pobox_xml ubpx SET ubpx.status = ? WHERE ubpx.rowid = ?");
+					  "UPDATE"
+					+ "   ubi_pobox_xml ubpx "
+					+ "SET"
+					+ "   ubpx.status = ? "
+					+ "WHERE "
+					+ "   ubpx.rowid = ?");
 		
 			stmt.setInt(1, pUbpxRow.getStatus().getId());
 			stmt.setString(2, pUbpxRow.getRowId());

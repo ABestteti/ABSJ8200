@@ -10,6 +10,18 @@ import br.com.acaosistemas.db.model.UBIPoboxXmlLog;
 import br.com.acaosistemas.main.Versao;
 import oracle.jdbc.OracleTypes;
 
+/**
+ * DAO para manipulacao da tabela UBI_POBOX_XML_LOG
+ * <p>
+ * <b>Empresa:</b> Acao Sistemas de Informatica Ltda.
+ * <p>
+ * Alterações:
+ * <p>
+ * 2018.03.15 - ABS - Adicionado JavaDoc.
+ * 
+ * @author Anderson Bestteti Santos
+ *
+ */
 public class UBIPoboxXmlLogDAO {
 
 	private Connection conn;
@@ -31,7 +43,21 @@ public class UBIPoboxXmlLogDAO {
 
 		try {
 			stmt = conn.prepareStatement(
-					"INSERT INTO ubi_pobox_xml_log (ubpx_seq_reg,seq_reg,dt_mov,num_erro,mensagem,status) VALUES (?,?,?,?,?,?)");
+					  "INSERT INTO "
+					+ "   ubi_pobox_xml_log "
+					+ "   (ubpx_seq_reg,"
+					+ "    seq_reg,"
+					+ "    dt_mov,"
+					+ "    num_erro,"
+					+ "    mensagem,"
+					+ "    status) "
+					+ "VALUES "
+					+ "    (?,"
+					+ "     ?,"
+					+ "     ?,"
+					+ "     ?,"
+					+ "     ?,"
+					+ "     ?)");
 
 			stmt.setLong(1, pUbxl.getUbpxSeqReg());
 			stmt.setLong(2, getNextSeqReg());

@@ -3,9 +3,11 @@ package br.com.acaosistemas.main;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import br.com.acaosistemas.db.dao.UBIPoboxXmlDAO;
 import br.com.acaosistemas.db.dao.UBIPoboxXmlLogDAO;
@@ -17,6 +19,8 @@ import br.com.acaosistemas.wsclientes.ClienteWSCorreios;
 
 public class ProcessarUbiPoboxXml {
 
+	private static final Logger logger = LogManager.getLogger(ProcessarUbiPoboxXml.class);
+	
 	public ProcessarUbiPoboxXml() {
 	}
 
@@ -26,16 +30,15 @@ public class ProcessarUbiPoboxXml {
 		List<UBIPoboxXml> listaUbiPoboxXml = new ArrayList<UBIPoboxXml>();
 		UBIPoboxXmlLog    ubxl             = new UBIPoboxXmlLog();
 						
-		System.out.println("   Processando registros da UBI_POBOX_XML...");
+		logger.info("   Processando registros da UBI_POBOX_XML...");
 		
 		// Obtem a lista de registros da tabeke UBI_POBOX_XML a serem
 		// processados.
 		listaUbiPoboxXml = ubpxDAO.listPoboxXml();
 		for (UBIPoboxXml ubpxRow : listaUbiPoboxXml) {
 			
-			System.out.println("   ".concat(new Timestamp(System.currentTimeMillis()).toString()));
-			System.out.println("     Processando rowId....: " + ubpxRow.getRowId());
-			System.out.println("     Sequencia do registro: " + ubpxRow.getSeqReg());
+			logger.info("     Processando rowId....: " + ubpxRow.getRowId());
+			logger.info("     Sequencia do registro: " + ubpxRow.getSeqReg());
 				
 			try {
 				clientWS.execWebService(ubpxRow);
@@ -77,7 +80,7 @@ public class ProcessarUbiPoboxXml {
 		}
 		
 		ubpxDAO.closeConnection();
-		System.out.println("   Finalizado processomento da UBI_POBOX_XML.");
+		logger.info("   Finalizado processomento da UBI_POBOX_XML.");
 	}
 	
 	private void gravaExcecaoLog(UBIPoboxXml pUbpxRow, Exception pException) {

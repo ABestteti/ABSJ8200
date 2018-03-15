@@ -4,8 +4,15 @@ import br.com.acaosistemas.frw.enumeration.BaseEnum;
 
 /**
  * Enum para o dominio UBI_POBOX_XML.TIPO_RECURSO
- *
- * @author Cleber da Silveira.
+ * <p>
+ * <b>Empresa:</b> Acao Sistemas de Informatica Ltda.
+ * <p>
+ * Alterações:
+ * <p>
+ * 2018.03.15 - ABS - Adiconado JavaDOc.
+ * 
+ * @author Cleber da Silveira
+ * @author Anderson Bestteti
  */
 public enum TipoRecursoPoboxXMLEnum implements BaseEnum<String> {
     /**

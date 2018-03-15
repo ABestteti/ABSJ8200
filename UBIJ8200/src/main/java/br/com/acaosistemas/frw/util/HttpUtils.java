@@ -5,6 +5,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 
+/**
+ * Classe utilitaria com funcoes para trabalhar com o
+ * protocolo HTTP.
+ * <p>
+ * <b>Empresa:</b> Acao Sistemas de Informatica Ltda.
+ * <p>
+ * Alterações:
+ * <p>
+ * 2018.03.15 - ABS - Adicionado JavaDoc.
+ * 
+ * @author Anderson Bestteti Santos
+ *
+ */
 public final class HttpUtils {
 
 	/***
