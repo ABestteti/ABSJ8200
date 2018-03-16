@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import br.com.acaosistemas.db.connection.ConnectionFactory;
+import br.com.acaosistemas.db.connection.DBConnectionInfo;
 import br.com.acaosistemas.db.enumeration.StatusPoboxXMLEnum;
 import br.com.acaosistemas.db.enumeration.TipoRecursoPoboxXMLEnum;
 import br.com.acaosistemas.db.model.UBIPoboxXml;
@@ -63,6 +64,7 @@ public class UBIPoboxXmlDAO {
 					+ "   ubpx.rowid = ?");
 		
 			stmt.setString(1, pRowID);
+			stmt.setFetchSize(DBConnectionInfo.MAX_FETCH_SIZE);
 			
 			ResultSet rs = stmt.executeQuery();
 			
@@ -120,6 +122,7 @@ public class UBIPoboxXmlDAO {
 					+ "   ubpx.status = ?");
 			
 			stmt.setInt(1, StatusPoboxXMLEnum.A_TRANSMITIR.getId());
+			stmt.setFetchSize(DBConnectionInfo.MAX_FETCH_SIZE);
 			
 			ResultSet rs = stmt.executeQuery();
 			

@@ -13,6 +13,23 @@ package br.com.acaosistemas.db.connection;
  */
 public final class DBConnectionInfo {
 
+	
+	/**
+	 * Define a quantidade maxima de registros a serem recuperados
+	 * numa operacao de fetch. Esse constante pode ser usada em objetos
+	 * do tipo {@link PreparedStatement} para evitar estouro de memoria 
+	 * da JVM quando existe a possibilidade de recuperar do banco milhoes
+	 * de linhas em uma unica operacao de fetch.
+	 */
+	public static int MAX_FETCH_SIZE = 100;
+	
+	/**
+	 * Define a quantidade maxima de comandos SQL que serao armazenados
+	 * em cache para melhorar a performance de execucao de consultas que
+	 * sao executadas repetidamente pela aplicacao.
+	 */
+	public static int MAX_STATEMENT_CACHE = 10;
+	
 	// Nome do usuario do banco de dados
 	private static String dbUserName;
 

@@ -48,6 +48,9 @@ public class ConnectionFactory {
 	        		pds.setMinPoolSize(1);
 	        		pds.setMaxPoolSize(5);
 	        		
+	        		// Habilita o cache de comandos SQL para o pool de conexao.
+	        		pds.setMaxStatements(DBConnectionInfo.MAX_STATEMENT_CACHE);
+	        		
 		           	// Cria uma conexao com o banco Oracle
 	        		connDB = (OracleConnection) pds.getConnection();
 	        		
