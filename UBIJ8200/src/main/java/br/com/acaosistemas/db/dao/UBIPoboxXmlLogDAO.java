@@ -94,11 +94,15 @@ public class UBIPoboxXmlLogDAO {
 			stmt.execute();
 			
 			nextVal = stmt.getLong(1);
-						
-			stmt.close();
 		} catch (SQLException e) {
 			logger.error(e);
-		}	
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				logger.error(e);
+			}
+		}
 		return nextVal;
 	}	
 }

@@ -85,6 +85,12 @@ public class UBIPoboxXmlDAO {
 			
 		} catch (SQLException e) {
 			logger.error(e);
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				logger.error(e);
+			}
 		}
 		
 		return ubpx;
@@ -147,6 +153,12 @@ public class UBIPoboxXmlDAO {
 
 		} catch (SQLException e) {
 			logger.error(e);
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				logger.error(e);
+			}
 		}
 		
 		return listaUbiPoboxXml;
@@ -171,6 +183,12 @@ public class UBIPoboxXmlDAO {
 			stmt.close();			
 		} catch (SQLException e) {
 			logger.error(e);
-		}		
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				logger.error(e);
+			}
+		}
 	}	
 }
