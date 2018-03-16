@@ -10,6 +10,9 @@ import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import br.com.acaosistemas.db.enumeration.StatusPoboxXMLEnum;
 import br.com.acaosistemas.db.model.UBIPoboxXml;
 import br.com.acaosistemas.frw.util.ExceptionUtils;
@@ -29,6 +32,8 @@ import br.com.acaosistemas.frw.util.HttpUtils;
  */
 public class ClienteWSCorreios {
 	
+	private static final Logger logger = LogManager.getLogger(ClienteWSCorreios.class);
+	
 	/**
 	 * Construtor default da classe
 	 */
@@ -42,7 +47,9 @@ public class ClienteWSCorreios {
 		if (pUbpxRow.getWsEndpoint() == null) {
 			// Caso nao exista o endereco de endpoint definido, deve ser gerado uma excecao 
 			// para invalidar o envolope lido do banco de dados.
-			throw new IOException("Nao foi definido no envelope o endereco do servico web (endpoint).");
+			String msg = "Nao foi definido no envelope o endereco do servico web (endpoint).";
+			logger.error(msg);
+			throw new IOException(msg);
 		}
 		
 		// Recupera o endereco de endpoint do web service da ubi_pobox_xml
@@ -95,7 +102,7 @@ public class ClienteWSCorreios {
             }
 			
 			if (request.getResponseCode() != HttpURLConnection.HTTP_OK) {
-			    System.out.println("     Codigo de erro HTTP..: "+ request.getResponseCode() + " [" + wsEndPoint + "]");
+			    logger.info("     Codigo de erro HTTP..: "+ request.getResponseCode() + " [" + wsEndPoint + "]");
 			    
 			    if (request.getResponseCode() == HttpURLConnection.HTTP_INTERNAL_ERROR) {
 				    throw new MalformedURLException("Codigo HTTP retornado: " + 
@@ -113,17 +120,17 @@ public class ClienteWSCorreios {
 			    }
 			}
 			else {
-				System.out.println("     Codigo HTTP..........: " + request.getResponseMessage());
-				System.out.println("     Mensagem do servico..: " + HttpUtils.readResponse(request) + " [" + wsEndPoint + "]");
+				logger.info("     Codigo HTTP..........: " + request.getResponseMessage());
+				logger.info("     Mensagem do servico..: " + HttpUtils.readResponse(request) + " [" + wsEndPoint + "]");
 			}			
 		} catch (MalformedURLException e) {
-			System.out.println("     Codigo de erro.......: " + e.toString());
+			logger.error("     Codigo de erro.......: " + e.toString());
 			throw new MalformedURLException(e.getMessage()+":\n" + ExceptionUtils.stringStackTrace(e));
 		} catch (SocketTimeoutException e) {
-			System.out.println("     Codigo de erro.......: " + e.toString());
+			logger.error("     Codigo de erro.......: " + e.toString());
 			throw new SocketTimeoutException(e.getMessage()+":\n" + ExceptionUtils.stringStackTrace(e));
 		} catch (IOException e) {
-			System.out.println("     Codigo de erro.......: " + e.toString());
+			logger.error("     Codigo de erro.......: " + e.toString());
 			throw new IOException(e.getMessage()+":\n" + ExceptionUtils.stringStackTrace(e));
 		}
 	}
