@@ -20,6 +20,7 @@ import oracle.ucp.jdbc.PoolDataSourceFactory;
  *                  - Adicionado suporte do PoolDataSource da Oracle.
  * 
  * @author Anderson Bestteti
+ * @see http://www.oracle.com/technetwork/articles/vasiliev-oracle-jdbc-090470.html
  */
 public class ConnectionFactory {
 
