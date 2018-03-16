@@ -57,7 +57,6 @@ public class ProcessarUbiPoboxXml {
 				
 				UBIPoboxXmlLogDAO ubxlDAO = new UBIPoboxXmlLogDAO();
 				ubxlDAO.insert(ubxl);
-				ubxlDAO.closeConnection();
 			} catch (MalformedURLException e) {
 				// Caso a chamada do web service do correio retornar a excecao
 				// MalformedURLException, faz a atualizacao do status com o
@@ -79,7 +78,6 @@ public class ProcessarUbiPoboxXml {
 			}
 		}
 		
-		ubpxDAO.closeConnection();
 		logger.info("   Finalizado processomento da UBI_POBOX_XML.");
 	}
 	
@@ -102,6 +100,5 @@ public class ProcessarUbiPoboxXml {
 		ubxl.setNumErro(new Long(pUbpxRow.getStatus().getId()));
 		
 		ubxlDAO.insert(ubxl);
-		ubxlDAO.closeConnection();		
 	}
 }
