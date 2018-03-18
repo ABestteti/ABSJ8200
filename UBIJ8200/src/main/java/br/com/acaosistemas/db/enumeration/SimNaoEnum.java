@@ -1,5 +1,17 @@
 package br.com.acaosistemas.db.enumeration;
 
+/**
+ * Enumeracao para representar os valores SIM e NAO.
+ * <p>
+ * <b>Empresa:</b> Acao Sistemas de Informatica Ltda.
+ * <p>
+ * Alterações:
+ * <p>
+ * 2018.03.15 - ABS - Adiconado JavaDOc.
+ * 
+ * @author Anderson Bestteti Santos
+ *
+ */
 public enum SimNaoEnum {
     /**
      * Enumeração para SIM.

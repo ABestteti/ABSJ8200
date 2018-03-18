@@ -4,10 +4,16 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 /**
+ * Classe utilitaria manipular informacoes de excecoes
+ * <p>
+ * <b>Empresa:</b> Acao Sistemas de Informatica Ltda.
+ * <p>
+ * Alterações:
+ * <p>
+ * 2018.03.15 - ABS - Adicionado JavaDoc.
  * 
  * @author Anderson Bestteti Santos
  *
- * Classe utilitaria manipular informacoes de excecoes
  */
 public final class ExceptionUtils {
 

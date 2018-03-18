@@ -7,4 +7,8 @@
 /.project
 /.classpath
 /.gitignore
+<<<<<<< HEAD
 >>>>>>> branch 'master' of https://github.com/ABestteti/UBIJ8200.git
+=======
+/UBIJ8200.log
+>>>>>>> refs/heads/SA20476

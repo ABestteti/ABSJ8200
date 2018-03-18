@@ -1,25 +1,25 @@
 package br.com.acaosistemas.frw.enumeration;
 
 /**
- * Interface que define se uma enumeração é identificável por ID.
+ * Interface que define se uma enumeracao e identificavel por ID.
  *
- * @author Estevão Cavinato
- * @param <T> Tipo da chave da enumeração.
+ * @author Estevao Cavinato
+ * @param <T> Tipo da chave da enumeracao.
  */
 public interface IdentifiableEnum<T extends Object> {
 
     /**
-     * ID da enumeração, a ser tipada na definição.
+     * ID da enumeracao, a ser tipada na definicao.
      *
-     * @return ID da enumeração.
+     * @return ID da enumeracao.
      */
     T getId();
 
     /**
      *
-     * Método que retorna a descrição da Enumeração.
+     * Metodo que retorna a descricao da Enumeracao.
      *
-     * @return a descrição da Enumeração.
+     * @return a descricao da Enumeracao.
      */
     String getDescricao();
 

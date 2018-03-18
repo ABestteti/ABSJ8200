@@ -13,7 +13,7 @@ apply plugin: 'java-library'
 apply plugin: 'java-library-distribution'
 
 //version = '1.0'
-def versionAcao = "3.0.00.15.01.2018"
+def versionAcao = "3.0.00.15.03.2018"
 def appName = "UBIJ8200 - Servico cliente do web service do correio"
 
 tasks.withType(JavaCompile) {
@@ -36,24 +36,26 @@ task fatJar(type: Jar) {
 repositories {    
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
+    mavenLocal()
     jcenter()
     mavenCentral()
 }
 
 dependencies {
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api 'org.apache.commons:commons-math3:3.6.1'
+    // The production code uses the SLF4J logging API at compile time
+    //compile 'org.slf4j:slf4j-api:1.7.22'
 
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation 'com.google.guava:guava:21.0'
-
-    // Use JUnit test framework
-    testImplementation 'junit:junit:4.12'
-
-    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+    // Declare the dependency for your favourite test framework you want to use in your tests.
+    // TestNG is also supported by the Gradle Test task. Just change the
+    // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
+    // 'test.useTestNG()' to your build script.
+    testCompile 'junit:junit:4.12'
+    
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.9.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.9.1'
-          
+              
     compile files('lib/ojdbc7.jar')
+    compile files('lib/ucp.jar')     
 }
 
  // Task "distZip" added by plugin "java-library-distribution":
@@ -67,9 +69,21 @@ jar {
         attributes 'Implementation-Title': appName,
         'Implementation-Version': versionAcao,
         'Main-Class': 'br.com.acaosistemas.main.Daemon',
-        'Class-Path': configurations.runtime.files.collect { "lib/$it.name" }.join(' ')
+        'Class-Path': "resources/ " + configurations.runtime.files.collect { "lib/$it.name" }.join(' ')
     }
     // How-to add class path:
     //     https://stackoverflow.com/questions/22659463/add-classpath-in-manifest-using-gradle
     //     https://gist.github.com/simon04/6865179
+}
+
+// Adiciona na task distZip a inclusao do diretorio resources e o seu conteudo no arquivo ZIP e TAR
+// para distribuicao da aplicacao.
+// Referencias:
+// https://stackoverflow.com/questions/5743036/deploy-additional-files-in-gradle-application-plugin
+// http://leetschau.github.io/blog/2014/11/19/153734/
+distZip {
+    into(project.name) {
+        from '.'
+        include 'resources/*'
+    }
 }
