@@ -6,6 +6,15 @@
  * user guide available at https://docs.gradle.org/3.5/userguide/java_library_plugin.html
  *
  */
+ plugins {
+  id "com.gradle.build-scan" version "1.16"
+}
+
+buildScan {
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
+}
+ 
 // Apply the java-library plugin to add support for Java Library
 apply plugin: "eclipse" 
 apply plugin: "java"
