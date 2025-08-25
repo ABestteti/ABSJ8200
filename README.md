@@ -1,2 +1,2 @@
-# UBIJ8200
+# ABSJ8200
 A Java client for web services
